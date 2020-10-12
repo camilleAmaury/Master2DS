@@ -55,6 +55,8 @@ class Game(object):
         return self.__repr__()
 
 
+
+
 def play_game(M, strategy, max_time, init_coord, epochs=1):
     game = Game(max_time)
     
@@ -73,3 +75,23 @@ def play_game(M, strategy, max_time, init_coord, epochs=1):
             _action=action
         print("Time consumed :\n   > {}".format(game.time))
     return game.ids, sum(game.rewards)
+
+def play_game2(M, M_30, strategy, max_time, init_coord, epochs=1):
+    game = Game2(max_time,M_30)
+    max_ = [0,0]
+    for _ in range(epochs):
+        # reset env
+        game_correctly_ended, game_bug_ended, possibilities, _, time_left, coordinates = game.init_game(M, init_coord)
+        _action = None
+        # stepping in the environnement
+        while((not game_correctly_ended) and (not game_bug_ended)):
+            # the agent choose the following action
+            action, distance = strategy.choose_action(possibilities, time_left, coordinates)
+            if _action != None and _action == action:
+                print("bug")
+            # step
+            game_correctly_ended, game_bug_ended, possibilities, _, time_left, coordinates = game.step_env(action, distance)
+            _action=action
+        if max_[0] < sum(game.rewards):
+            max_ = [sum(game.rewards), game.ids]
+    return max_

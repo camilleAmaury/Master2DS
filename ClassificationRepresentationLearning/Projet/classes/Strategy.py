@@ -36,3 +36,5 @@ class Naive_Metric_Strategy(Strategy):
         return "<Object : Strategy (DataCamp) <> Naive_Metric_Strategy>"
     def __str__(self):
         return self.__repr__()
+
+
