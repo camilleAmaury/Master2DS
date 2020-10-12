@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<smile version="1.0" id="Network1" numsamples="10000" discsamples="10000">
+	<nodes>
+		<cpt id="B1">
+			<state id="B1_True" />
+			<state id="B1_False" />
+			<probabilities>0.5 0.5</probabilities>
+		</cpt>
+		<cpt id="B2">
+			<state id="B2_True" />
+			<state id="B2_False" />
+			<probabilities>0.5 0.5</probabilities>
+		</cpt>
+		<cpt id="B3">
+			<state id="B3_True" />
+			<state id="B3_False" />
+			<probabilities>0.5 0.5</probabilities>
+		</cpt>
+		<cpt id="B4">
+			<state id="B4_True" />
+			<state id="B4_False" />
+			<probabilities>0.5 0.5</probabilities>
+		</cpt>
+		<cpt id="N1">
+			<state id="N1_1" />
+			<state id="N1_0" />
+			<parents>B1 B2</parents>
+			<probabilities>0 1 0 1 1 0 0 1</probabilities>
+		</cpt>
+		<cpt id="N2">
+			<state id="N2_2" />
+			<state id="N2_1" />
+			<state id="N2_0" />
+			<parents>B2 B3 B1</parents>
+			<probabilities>0 0 1 0 0 1 0 0 1 0 0 1 1 0 0 0 1 0 0 1 0 0 0 1</probabilities>
+		</cpt>
+		<cpt id="N3">
+			<state id="N3_2" />
+			<state id="N3_1" />
+			<state id="N3_0" />
+			<parents>B3 B4 B2</parents>
+			<probabilities>0 0 1 0 0 1 0 0 1 0 0 1 1 0 0 0 1 0 0 1 0 0 0 1</probabilities>
+		</cpt>
+		<cpt id="N4">
+			<state id="N4_1" />
+			<state id="N4_0" />
+			<parents>B4 B3</parents>
+			<probabilities>0 1 0 1 1 0 0 1</probabilities>
+		</cpt>
+	</nodes>
+	<extensions>
+		<genie version="1.0" app="GeNIe This network was created in GeNIe Academic, which can be used for academic teaching and research purposes only" name="Network1">
+			<node id="B1">
+				<name>B1</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>410 263 446 285</position>
+			</node>
+			<node id="B2">
+				<name>B2</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>410 349 446 371</position>
+			</node>
+			<node id="B3">
+				<name>B3</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>408 430 444 452</position>
+			</node>
+			<node id="B4">
+				<name>B4</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>408 506 444 528</position>
+			</node>
+			<node id="N1">
+				<name>N1</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>564 265 600 287</position>
+			</node>
+			<node id="N2">
+				<name>N2</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>566 349 602 371</position>
+			</node>
+			<node id="N3">
+				<name>N3</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>567 433 603 455</position>
+			</node>
+			<node id="N4">
+				<name>N4</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>569 509 605 531</position>
+			</node>
+		</genie>
+	</extensions>
+</smile>
