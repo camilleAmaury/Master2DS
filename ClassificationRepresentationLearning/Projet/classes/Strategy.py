@@ -24,12 +24,11 @@ class Naive_Metric_Strategy(Strategy):
         self.metric = metric
         
     def choose_action(self, possibilities, rewards, time_left, coordinate):
-        distances = np.zeros((possibilities.shape[0],))
-        for point in range(possibilities.shape[0]):
-            distances[point] = math.sqrt((coordinate[0]- possibilities[point,0])**2 + (coordinate[1] - possibilities[point,1])**2)
+        distances = [possibilities[i][1] for i in range(len(possibilities))]
+        ids = [possibilities[i][0] for i in range(len(possibilities))]
         ratios = self.metric.apply(distances, rewards)
-        action = self.metric.choose(distances, ratios, time_left)
-        return action, distances[action]
+        action = self.metric.choose(distances, ids, ratios, time_left)
+        return int(ids[action]), distances[action]
         
     # string representation of the object
     def __repr__(self):
