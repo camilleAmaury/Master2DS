@@ -67,3 +67,20 @@ class Euclidean_3_Metric(Metric):
                 if euclidean_ratios[i] != 0.:
                     euclidean_ratios[i] -= (mini - 1)
         return euclidean_ratios
+
+
+class OneStep_Euclidean_1_Metric(Metric):
+    def __init__(self, ratio):
+        super(OneStep_Euclidean_1_Metric, self).__init__()
+        self.ratio = ratio
+        
+    def apply(self, distances, rewards):
+        n = len(distances)
+        euclidean_ratios = np.array([ ((rewards[i][0] / distances[i]**3 )*(self.ratio) + rewards[i][1]*(1-self.ratio))
+                                       if distances[i] != 0. and rewards[i][0] != 0. else 0. for i in range(n)])
+        mini = np.min(euclidean_ratios)
+        if mini < 0.:
+            for i in range(n):
+                if euclidean_ratios[i] != 0.:
+                    euclidean_ratios[i] -= (mini - 1)
+        return euclidean_ratios
