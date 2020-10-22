@@ -1,0 +1,1645 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{rapport}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{report-1-regression-and-classification}{%
+\section{Report 1 : Regression and
+Classification}\label{report-1-regression-and-classification}}
+
+Clément Antheaume, Camille-Amaury Juge.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{IPython}\PY{n+nn}{.}\PY{n+nn}{display} \PY{k+kn}{import} \PY{n}{Image}
+\PY{n}{display}\PY{p}{(}\PY{n}{Image}\PY{p}{(}\PY{n}{filename}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nantes.png}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_1_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{definitions-of-indicators}{%
+\subsection{Definitions of indicators
+:}\label{definitions-of-indicators}}
+
+    \hypertarget{classification-categorical-class}{%
+\subsubsection{Classification (categorical
+class)}\label{classification-categorical-class}}
+
+Considering TP = Numbers of individuals well classified positive, TN =
+Numbers of individuals well classified negative and FP Numbers of
+positive individuals classified negative, FN Numbers of negative
+individuals classified positive.
+
+    \hypertarget{precision}{%
+\paragraph{Precision}\label{precision}}
+
+\begin{itemize}
+\tightlist
+\item
+  TP / TP + TN
+\end{itemize}
+
+    \hypertarget{recall}{%
+\paragraph{Recall}\label{recall}}
+
+\begin{itemize}
+\tightlist
+\item
+  TP / TP + FN
+\item
+  Represent the sensitivity of the model.
+\end{itemize}
+
+    \hypertarget{specificity}{%
+\paragraph{Specificity}\label{specificity}}
+
+\begin{itemize}
+\tightlist
+\item
+  TN/FP+TN
+\end{itemize}
+
+    \hypertarget{sensitivity}{%
+\paragraph{Sensitivity}\label{sensitivity}}
+
+\begin{itemize}
+\tightlist
+\item
+  TP/TP+FN
+\end{itemize}
+
+    \hypertarget{f-measure}{%
+\paragraph{F-measure}\label{f-measure}}
+
+\begin{itemize}
+\tightlist
+\item
+  2 * ( (Precision * Recall) / (Precision + Recall) )
+\item
+  Mathematicly, the harmonic mean of recall and precision.
+\end{itemize}
+
+    \hypertarget{rand-index}{%
+\paragraph{Rand index}\label{rand-index}}
+
+\begin{itemize}
+\tightlist
+\item
+  TP + TN / TP + FP + FN +TN
+\item
+  Percentage of correct decisions made by the classification algorithm.
+\item
+  Can be used in clustering to measure the similarity between two
+  clusters.
+\end{itemize}
+
+    \hypertarget{roc-curve}{%
+\paragraph{ROC Curve}\label{roc-curve}}
+
+\begin{itemize}
+\tightlist
+\item
+  Function giving the number of True positive rate (y) given the false
+  negative rate.
+\item
+  The goal is to have a curve as close as possible to y = x.
+\end{itemize}
+
+    \hypertarget{regression-numeric-class}{%
+\subsubsection{Regression (numeric
+class)}\label{regression-numeric-class}}
+
+    \hypertarget{mean-squared-error}{%
+\paragraph{Mean Squared Error}\label{mean-squared-error}}
+
+\begin{itemize}
+\tightlist
+\item
+  MSE belongs to R+
+\item
+  MSE = Average(Indicators - Indicator2)
+\item
+  \textless=\textgreater{} MSE = Bias(Indicator)2 + Variance(Indicator)
+\item
+  As we can see, it can be defined as a mesure of the bias and variance
+  of the Indicator
+\item
+  It evaluates the quadratic risk of the Indicator
+\item
+  Sensitive to outliers (large error values), thus usefull when we want
+  our model to be quite stable
+\end{itemize}
+
+    \hypertarget{root-mean-squared-error}{%
+\paragraph{Root Mean Squared-Error}\label{root-mean-squared-error}}
+
+\begin{itemize}
+\tightlist
+\item
+  RMSE belongs to R+
+\item
+  RMSE = Root(MSE) = Root(Average(Indicators - Indicator2))
+\item
+  \textless=\textgreater{} RMSE = Root(Bias(Indicator)2 +
+  Variance(Indicator))
+\item
+  As we can see, it can be defined as a mesure of the standard deviation
+  of the Indicator
+\item
+  It evaluates the quadratic risk of the Indicator
+\item
+  Even more Sensitive to outliers (large error values), thus usefull
+  when we want our model to avoid large errors
+\end{itemize}
+
+    \hypertarget{mean-bias-error}{%
+\paragraph{Mean Bias Error}\label{mean-bias-error}}
+
+\begin{itemize}
+\tightlist
+\item
+  MBE belongs to R
+\item
+  MBE = Average(Ylabel - Ypredicted)
+\item
+  As we can see, it can be defined as a mesure of the bias of the error
+  between labels and predictions
+\item
+  It indicates if the model surestimate (if MBE \textless{} 0) or
+  underestimate (if MBE \textgreater{} 0) the output
+\end{itemize}
+
+    \hypertarget{systematic-error}{%
+\paragraph{Systematic Error}\label{systematic-error}}
+
+\begin{itemize}
+\tightlist
+\item
+  SE or SD belongs to R+
+\item
+  SD = Root(RMSE(error)2 - MBE(error)2)
+\item
+  As we can see, it can be defined as a mesure of the MSE-Bias so it
+  reduces the importance of larger errors
+\end{itemize}
+
+    \hypertarget{mean-absolute-error}{%
+\paragraph{Mean Absolute Error}\label{mean-absolute-error}}
+
+\begin{itemize}
+\tightlist
+\item
+  MAE belongs to R+
+\item
+  MAE = Average(\textbar Ylabel - Ypredicted\textbar)
+\item
+  As we can see, it can be defined as a mesure of the bias, not
+  regarding to its orientation
+\item
+  MAE will not be sensible to outliers
+\end{itemize}
+
+    \hypertarget{mean-absolute-pourcentage-error}{%
+\paragraph{Mean Absolute Pourcentage
+Error}\label{mean-absolute-pourcentage-error}}
+
+\begin{itemize}
+\tightlist
+\item
+  MAPE belongs to R+
+\item
+  MAPE = Average(\textbar(Ylabel - Ypredicted) / Ylabel\textbar)
+\item
+  As we can see, it can be defined as a mesure of the bias, not
+  regarding to its orientation
+\item
+  It has the advantage to show ratio errors rather than value errors
+\end{itemize}
+
+    \hypertarget{r2}{%
+\paragraph{R2}\label{r2}}
+
+\begin{itemize}
+\tightlist
+\item
+  R2 belongs to R, R2 belongs to {[}-1, 1{]}
+\item
+  R2 = Correlation(Ypredicted, Ylabel)
+\item
+  \textless=\textgreater{} R2 = Sum((Ypredicted -
+  Average(Ylabel))2/Sum((Ylabel - Average(Ylabel))2
+\item
+  As we can see, it can be defined as a mesure of the correlation of the
+  error
+\item
+  It has the advantages to put every error on the same scale
+\end{itemize}
+
+    \hypertarget{validation-techniques}{%
+\subsubsection{Validation Techniques}\label{validation-techniques}}
+
+    \hypertarget{hold-out-cross-validation}{%
+\paragraph{Hold Out Cross Validation}\label{hold-out-cross-validation}}
+
+Separate the dataset in two sub-datasets : * Training Set is used to
+train the model. * Testing Set is used to validate the model with
+indicators.
+
+The splitting is done with a percentage of the initial dataset (for
+instance 80\%/20\%).
+
+This methods has the advantage to avoid overfitting. But it is not
+stable since we still have a low probability to have the worst
+configuration in our sub-datasets.
+
+    \hypertarget{k-fold-cross-validation}{%
+\paragraph{K-Fold Cross Validation}\label{k-fold-cross-validation}}
+
+Separate the dataset S in k sub-datasets, then each subsets contains N/k
+individuals. Thus, we iterate k times on all sub-datasets : * we create
+a training set with k-1 sub-datasets * we create a testing set with the
+last sub-datasets * we compute the empirical error
+
+When the k-iterations are done, we compute the mean of the empirical
+error. The we have a stable validation indicator over multiple
+configuration (k) of our datasets.
+
+    \hypertarget{classification-with-python}{%
+\subsection{Classification with
+Python}\label{classification-with-python}}
+
+    \hypertarget{imports}{%
+\subsubsection{Imports}\label{imports}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{100}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{from} \PY{n+nn}{sklearn} \PY{k+kn}{import} \PY{n}{tree}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{metrics} \PY{k+kn}{import} \PY{n}{confusion\PYZus{}matrix}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{ensemble} \PY{k+kn}{import} \PY{n}{AdaBoostClassifier}\PY{p}{,} \PY{n}{RandomForestClassifier}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{model\PYZus{}selection} \PY{k+kn}{import} \PY{n}{train\PYZus{}test\PYZus{}split}
+\PY{k+kn}{from} \PY{n+nn}{sklearn} \PY{k+kn}{import} \PY{n}{datasets}
+\PY{k+kn}{import} \PY{n+nn}{random}
+\PY{k+kn}{import} \PY{n+nn}{disarray}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{mushroom-decision-tree}{%
+\subsubsection{Mushroom Decision Tree}\label{mushroom-decision-tree}}
+
+I modified the Mushroom dataset to be a xlsx because there were way too
+many different inputs and I couldn't find one that would make the
+process easier to us. Here's the download link for the xls version :
+`https://tinyurl.com/y68krwbw'
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{31}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{classes} \PY{o}{=} \PY{p}{[}\PY{l+s+sa}{u}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Comestible}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+sa}{u}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Non Comestible}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{data} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Mushroom.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{encoding}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{utf\PYZhy{}8}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{X} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+\PY{n}{Y} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+\PY{n}{dtree} \PY{o}{=} \PY{n}{tree}\PY{o}{.}\PY{n}{DecisionTreeClassifier}\PY{p}{(}\PY{p}{)}
+\PY{n}{dtree} \PY{o}{=} \PY{n}{dtree}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{70}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{tree}\PY{o}{.}\PY{n}{export\PYZus{}graphviz}\PY{p}{(}\PY{n}{dtree}\PY{p}{,} \PY{n}{out\PYZus{}file}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mushroom.dot}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{feature\PYZus{}names}\PY{o}{=}\PY{n}{X}\PY{o}{.}\PY{n}{columns}\PY{p}{,} \PY{n}{class\PYZus{}names}\PY{o}{=}\PY{n}{classes}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{71}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{display}\PY{p}{(}\PY{n}{Image}\PY{p}{(}\PY{n}{filename}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mushroom.png}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_28_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{weather-decision-tree}{%
+\subsubsection{Weather Decision Tree}\label{weather-decision-tree}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{112}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{classes} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Umbrella}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{No umbrella}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{data} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Meteo.xls}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{p}{\PYZob{}}\PY{k+kc}{True} \PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{k+kc}{False} \PY{p}{:} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{high}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{normal}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{N}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{P}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:} \PY{l+m+mi}{1}\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{data} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{get\PYZus{}dummies}\PY{p}{(}\PY{n}{data}\PY{p}{,}  \PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Tempreature}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Outlook}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{X} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+\PY{n}{Y} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+
+\PY{n}{dtree} \PY{o}{=} \PY{n}{tree}\PY{o}{.}\PY{n}{DecisionTreeClassifier}\PY{p}{(}\PY{p}{)}
+\PY{n}{dtree} \PY{o}{=} \PY{n}{dtree}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{117}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{tree}\PY{o}{.}\PY{n}{export\PYZus{}graphviz}\PY{p}{(}\PY{n}{dtree}\PY{p}{,} \PY{n}{out\PYZus{}file}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{meteo.dot}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{feature\PYZus{}names}\PY{o}{=}\PY{n}{X}\PY{o}{.}\PY{n}{columns}\PY{p}{,} \PY{n}{class\PYZus{}names}\PY{o}{=}\PY{n}{classes}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{118}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{display}\PY{p}{(}\PY{n}{Image}\PY{p}{(}\PY{n}{filename}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{meteo.png}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_32_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{some-comparison-on-the-iris-dataset}{%
+\subsubsection{Some comparison on the Iris
+dataset}\label{some-comparison-on-the-iris-dataset}}
+
+    \hypertarget{decision-tree-classification}{%
+\paragraph{Decision Tree
+Classification}\label{decision-tree-classification}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{151}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{iris} \PY{o}{=} \PY{n}{datasets}\PY{o}{.}\PY{n}{load\PYZus{}iris}\PY{p}{(}\PY{p}{)}
+\PY{n}{X} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{iris}\PY{o}{.}\PY{n}{data}\PY{p}{,} \PY{n}{columns} \PY{o}{=} \PY{n}{iris}\PY{o}{.}\PY{n}{feature\PYZus{}names}\PY{p}{)}
+\PY{n}{Y} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{iris}\PY{o}{.}\PY{n}{target}\PY{p}{)}
+\PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{X\PYZus{}test}\PY{p}{,} \PY{n}{Y\PYZus{}train}\PY{p}{,} \PY{n}{Y\PYZus{}test} \PY{o}{=} \PY{n}{train\PYZus{}test\PYZus{}split}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{)}
+\PY{n}{classes} \PY{o}{=} \PY{n}{iris}\PY{o}{.}\PY{n}{target\PYZus{}names}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{152}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{dtree} \PY{o}{=} \PY{n}{tree}\PY{o}{.}\PY{n}{DecisionTreeClassifier}\PY{p}{(}\PY{p}{)}
+\PY{n}{dtree} \PY{o}{=} \PY{n}{dtree}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{Y\PYZus{}train}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{153}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{tree}\PY{o}{.}\PY{n}{export\PYZus{}graphviz}\PY{p}{(}\PY{n}{dtree}\PY{p}{,} \PY{n}{out\PYZus{}file}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{iris.dot}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{feature\PYZus{}names}\PY{o}{=}\PY{n}{features}\PY{p}{,} \PY{n}{class\PYZus{}names}\PY{o}{=}\PY{n}{classes}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{154}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{display}\PY{p}{(}\PY{n}{Image}\PY{p}{(}\PY{n}{filename}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{iris.png}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_38_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{155}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{get\PYZus{}metrics}\PY{p}{(}\PY{n}{conf}\PY{p}{)}\PY{p}{:} \PY{c+c1}{\PYZsh{} Compute the generic metrics from the confusion matrix fro each class in the matrix}
+    \PY{c+c1}{\PYZsh{} Computing indicators sub\PYZhy{}terms}
+    \PY{k}{return} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{conf}\PY{p}{)}\PY{o}{.}\PY{n}{da}\PY{o}{.}\PY{n}{export\PYZus{}metrics}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{156}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Y\PYZus{}pred} \PY{o}{=} \PY{n}{dtree}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{)}
+\PY{n}{conf\PYZus{}} \PY{o}{=} \PY{n}{confusion\PYZus{}matrix}\PY{p}{(}\PY{n}{Y\PYZus{}test}\PY{p}{,} \PY{n}{Y\PYZus{}pred}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}
+\PY{n}{get\PYZus{}metrics}\PY{p}{(}\PY{n}{conf\PYZus{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{156}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                             0         1         2  micro-average
+accuracy                   1.0  0.868421  0.868421       0.912281
+f1                         1.0  0.827586  0.705882       0.868421
+false\_discovery\_rate       0.0  0.250000  0.142857       0.131579
+false\_negative\_rate        0.0  0.076923  0.400000       0.131579
+false\_positive\_rate        0.0  0.160000  0.035714       0.065789
+negative\_predictive\_value  1.0  0.954545  0.870968       0.934211
+positive\_predictive\_value  1.0  0.750000  0.857143       0.868421
+precision                  1.0  0.750000  0.857143       0.868421
+recall                     1.0  0.923077  0.600000       0.868421
+sensitivity                1.0  0.923077  0.600000       0.868421
+specificity                1.0  0.840000  0.964286       0.934211
+true\_negative\_rate         1.0  0.840000  0.964286       0.934211
+true\_positive\_rate         1.0  0.923077  0.600000       0.868421
+\end{Verbatim}
+\end{tcolorbox}
+        
+    We can see that the first class is clearly well predicted but both
+second and third class are 0.912\ldots{}
+
+It means that the model is able to correctly classify 947 out of 1000
+times (rounded values)
+
+    \hypertarget{random-forest-classification}{%
+\paragraph{Random Forest
+Classification}\label{random-forest-classification}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{135}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{rf} \PY{o}{=} \PY{n}{AdaBoostClassifier}\PY{p}{(}\PY{n}{n\PYZus{}estimators}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{rf}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{ravel}\PY{p}{(}\PY{n}{Y\PYZus{}train}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{135}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+AdaBoostClassifier(n\_estimators=100, random\_state=0)
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{136}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Y\PYZus{}pred} \PY{o}{=} \PY{n}{rf}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{)}
+
+\PY{n}{rf\PYZus{}conf} \PY{o}{=} \PY{n}{confusion\PYZus{}matrix}\PY{p}{(}\PY{n}{Y\PYZus{}test}\PY{p}{,} \PY{n}{Y\PYZus{}pred}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}
+\PY{n}{get\PYZus{}metrics}\PY{p}{(}\PY{n}{rf\PYZus{}conf}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{136}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                             0         1         2  micro-average
+accuracy                   1.0  0.947368  0.947368       0.964912
+f1                         1.0  0.933333  0.909091       0.947368
+false\_discovery\_rate       0.0  0.125000  0.000000       0.052632
+false\_negative\_rate        0.0  0.000000  0.166667       0.052632
+false\_positive\_rate        0.0  0.083333  0.000000       0.026316
+negative\_predictive\_value  1.0  1.000000  0.928571       0.973684
+positive\_predictive\_value  1.0  0.875000  1.000000       0.947368
+precision                  1.0  0.875000  1.000000       0.947368
+recall                     1.0  1.000000  0.833333       0.947368
+sensitivity                1.0  1.000000  0.833333       0.947368
+specificity                1.0  0.916667  1.000000       0.973684
+true\_negative\_rate         1.0  0.916667  1.000000       0.973684
+true\_positive\_rate         1.0  1.000000  0.833333       0.947368
+\end{Verbatim}
+\end{tcolorbox}
+        
+    We can see that the first class is clearly well predicted but both
+second and third class are 0.947\ldots{}
+
+It means that the model is able to correctly classify 964 out of 1000
+times (rounded values)
+
+The prediction is then better than the decision tree.
+
+    \hypertarget{adaboost-classification}{%
+\paragraph{AdaBoost Classification}\label{adaboost-classification}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{137}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ada} \PY{o}{=} \PY{n}{AdaBoostClassifier}\PY{p}{(}\PY{n}{n\PYZus{}estimators}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{ada}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{ravel}\PY{p}{(}\PY{n}{Y\PYZus{}train}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{137}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+AdaBoostClassifier(n\_estimators=100, random\_state=0)
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{138}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Y\PYZus{}pred} \PY{o}{=} \PY{n}{ada}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{)}
+
+\PY{n}{ada\PYZus{}conf} \PY{o}{=} \PY{n}{confusion\PYZus{}matrix}\PY{p}{(}\PY{n}{Y\PYZus{}test}\PY{p}{,} \PY{n}{Y\PYZus{}pred}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}
+\PY{n}{get\PYZus{}metrics}\PY{p}{(}\PY{n}{ada\PYZus{}conf}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{138}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                             0         1         2  micro-average
+accuracy                   1.0  0.947368  0.947368       0.964912
+f1                         1.0  0.933333  0.909091       0.947368
+false\_discovery\_rate       0.0  0.125000  0.000000       0.052632
+false\_negative\_rate        0.0  0.000000  0.166667       0.052632
+false\_positive\_rate        0.0  0.083333  0.000000       0.026316
+negative\_predictive\_value  1.0  1.000000  0.928571       0.973684
+positive\_predictive\_value  1.0  0.875000  1.000000       0.947368
+precision                  1.0  0.875000  1.000000       0.947368
+recall                     1.0  1.000000  0.833333       0.947368
+sensitivity                1.0  1.000000  0.833333       0.947368
+specificity                1.0  0.916667  1.000000       0.973684
+true\_negative\_rate         1.0  0.916667  1.000000       0.973684
+true\_positive\_rate         1.0  1.000000  0.833333       0.947368
+\end{Verbatim}
+\end{tcolorbox}
+        
+    We can see that the first class is clearly well predicted but both
+second and third class are 0.947\ldots{}
+
+It means that the model is able to correctly classify 964 out of 1000
+times (rounded values)
+
+The prediction is then better than the decision tree.
+
+    \hypertarget{linear-regression-with-r}{%
+\subsection{Linear Regression with R}\label{linear-regression-with-r}}
+
+    The dataset : https://www.kaggle.com/mohansacharya/graduate-admissions
+
+The Content :
+
+The dataset contains several parameters which are considered important
+during the application for Masters Programs. The parameters included are
+:
+
+\begin{itemize}
+\tightlist
+\item
+  GRE Scores ( out of 340 )
+\item
+  TOEFL Scores ( out of 120 )
+\item
+  University Rating ( out of 5 )
+\item
+  Statement of Purpose and Letter of Recommendation Strength ( out of 5
+  )
+\item
+  Undergraduate GPA ( out of 10 )
+\item
+  Research Experience ( either 0 or 1 )
+\item
+  Chance of Admit ( ranging from 0 to 1 )
+\end{itemize}
+
+\hypertarget{imports}{%
+\subsubsection{Imports}\label{imports}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{library}\PY{p}{(}\PY{n}{namespace}\PY{p}{)}
+\PY{n}{registerNamespace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{psy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{loadNamespace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{psych}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\PY{n}{library}\PY{p}{(}\PY{n}{ggplot2}\PY{p}{)}
+\PY{n}{library}\PY{p}{(}\PY{n}{reshape2}\PY{p}{)}
+\PY{n}{library}\PY{p}{(}\PY{n}{lattice}\PY{p}{)}
+\PY{n}{registerNamespace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ml}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{loadNamespace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{caret}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\PY{n}{registerNamespace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{metrics}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{loadNamespace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Metrics}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\PY{n}{registerNamespace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mlmetrics}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{loadNamespace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{MLmetrics}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\PY{n}{library}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{IRdisplay}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<environment: namespace:psych>
+    \end{Verbatim}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+Registered S3 methods overwritten by 'ggplot2':
+  method         from
+  [.quosures     rlang
+  c.quosures     rlang
+  print.quosures rlang
+    \end{Verbatim}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<environment: namespace:caret>
+    \end{Verbatim}
+
+    
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<environment: namespace:Metrics>
+    \end{Verbatim}
+
+    
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<environment: namespace:MLmetrics>
+    \end{Verbatim}
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{csv} \PY{o}{\PYZlt{}}\PY{o}{\PYZhy{}} \PY{n}{read}\PY{o}{.}\PY{n}{csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Admission\PYZus{}Predict.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{header} \PY{o}{=} \PY{n}{TRUE}\PY{p}{)}
+\PY{n}{head}\PY{p}{(}\PY{n}{csv}\PY{p}{[}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{:}\PY{n}{ncol}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tabular}{r|llllllll}
+ GRE.Score & TOEFL.Score & University.Rating & SOP & LOR & CGPA & Research & Chance.of.Admit\\
+\hline
+	 337  & 118  & 4    & 4.5  & 4.5  & 9.65 & 1    & 0.92\\
+	 324  & 107  & 4    & 4.0  & 4.5  & 8.87 & 1    & 0.76\\
+	 316  & 104  & 3    & 3.0  & 3.5  & 8.00 & 1    & 0.72\\
+	 322  & 110  & 3    & 3.5  & 2.5  & 8.67 & 1    & 0.80\\
+	 314  & 103  & 2    & 2.0  & 3.0  & 8.21 & 0    & 0.65\\
+	 330  & 115  & 5    & 4.5  & 3.0  & 9.34 & 1    & 0.90\\
+\end{tabular}
+
+
+    
+    \hypertarget{data-understanding}{%
+\subsubsection{Data Understanding}\label{data-understanding}}
+
+    \hypertarget{univariate-analysis}{%
+\paragraph{Univariate Analysis}\label{univariate-analysis}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{summ} \PY{o}{\PYZlt{}}\PY{o}{\PYZhy{}} \PY{n}{psy}\PY{p}{:}\PY{p}{:}\PY{n}{describe}\PY{p}{(}\PY{n}{csv}\PY{p}{[}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{:}\PY{n}{ncol}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+\PY{n}{summ}\PY{p}{[}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{(}\PY{n}{ncol}\PY{p}{(}\PY{n}{summ}\PY{p}{)}\PY{o}{\PYZpc{}}\PY{o}{/}\PY{o}{\PYZpc{}}\PY{k}{2} + 1)]
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tabular}{r|lllllll}
+  & vars & n & mean & sd & median & trimmed & mad\\
+\hline
+	GRE.Score & 1           & 400         & 316.807500  & 11.4736461  & 317.00      & 316.8500000 & 11.860800  \\
+	TOEFL.Score & 2           & 400         & 107.410000  &  6.0695138  & 107.00      & 107.3281250 &  5.930400  \\
+	University.Rating & 3           & 400         &   3.087500  &  1.1437281  &   3.00      &   3.0656250 &  1.482600  \\
+	SOP & 4           & 400         &   3.400000  &  1.0068686  &   3.50      &   3.4296875 &  0.741300  \\
+	LOR & 5           & 400         &   3.452500  &  0.8984775  &   3.50      &   3.4625000 &  0.741300  \\
+	CGPA & 6           & 400         &   8.598925  &  0.5963171  &   8.61      &   8.6024687 &  0.667170  \\
+	Research & 7           & 400         &   0.547500  &  0.4983620  &   1.00      &   0.5593750 &  0.000000  \\
+	Chance.of.Admit & 8           & 400         &   0.724350  &  0.1426093  &   0.73      &   0.7309688 &  0.133434  \\
+\end{tabular}
+
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{summ}\PY{p}{[}\PY{p}{,}\PY{p}{(}\PY{n}{ncol}\PY{p}{(}\PY{n}{summ}\PY{p}{)}\PY{o}{\PYZpc{}}\PY{o}{/}\PY{o}{\PYZpc{}}\PY{k}{2} + 1):ncol(summ)]
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tabular}{r|lllllll}
+  & mad & min & max & range & skew & kurtosis & se\\
+\hline
+	GRE.Score & 11.860800   & 290.00      & 340.00      & 50.00       & -0.06242254 & -0.7181786  & 0.573682306\\
+	TOEFL.Score &  5.930400   &  92.00      & 120.00      & 28.00       &  0.05678751 & -0.5985838  & 0.303475689\\
+	University.Rating &  1.482600   &   1.00      &   5.00      &  4.00       &  0.16997797 & -0.8123104  & 0.057186406\\
+	SOP &  0.741300   &   1.00      &   5.00      &  4.00       & -0.27369641 & -0.6937320  & 0.050343432\\
+	LOR &  0.741300   &   1.00      &   5.00      &  4.00       & -0.10619038 & -0.6808341  & 0.044923877\\
+	CGPA &  0.667170   &   6.80      &   9.92      &  3.12       & -0.06549644 & -0.4803728  & 0.029815855\\
+	Research &  0.000000   &   0.00      &   1.00      &  1.00       & -0.19014793 & -1.9687469  & 0.024918099\\
+	Chance.of.Admit &  0.133434   &   0.34      &   0.97      &  0.63       & -0.35080166 & -0.4122290  & 0.007130467\\
+\end{tabular}
+
+
+    
+    We can see that : * For each Variable except Research, the mean and
+median are quite the same : it means that there are no outliers which
+make mean varying much. Then, we conclude that since Reseach mean is
+near 0.54 and median 1., there are a lot of outliers values (near 0)
+which tend to attract mean. * The standard deviation is rather small for
+some variable comparing to their range of values, meaning that this
+variable has quite regrouped individuals values. * here is a quick
+interpretation of the kurtosis values :
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{display\PYZus{}png}\PY{p}{(}\PY{n}{file}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kurtosis.png}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} 
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_59_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    We can see that for example, the TOEFL.Score is near to follow a
+distribution Law of Cosinus (around -0.593762).
+
+\begin{itemize}
+\tightlist
+\item
+  The skew indicator helps us to know in which direction the `tail' of
+  the asymetric or symetric distribution is going. We will take the
+  example of Reseach again, which confirms the fact that the low values
+  reprsents the tail following the negative skew coefficient.
+\end{itemize}
+
+Let's check for outliers over our dataset :
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{boxplot}\PY{p}{(}\PY{n}{csv}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_61_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ggplot}\PY{p}{(}\PY{n}{csv}\PY{p}{,} \PY{n}{aes}\PY{p}{(}\PY{n}{x} \PY{o}{=} \PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}\PY{p}{)} \PY{o}{+} \PY{n}{geom\PYZus{}point}\PY{p}{(}\PY{p}{)} \PY{o}{+} 
+    \PY{n}{labs}\PY{p}{(}\PY{n}{title} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Scatter plot of GRE.Score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+         \PY{n}{x} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{individuals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{GRE.Score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_62_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ggplot}\PY{p}{(}\PY{n}{csv}\PY{p}{,} \PY{n}{aes}\PY{p}{(}\PY{n}{x} \PY{o}{=} \PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}\PY{p}{)} \PY{o}{+} \PY{n}{geom\PYZus{}point}\PY{p}{(}\PY{p}{)} \PY{o}{+} 
+    \PY{n}{labs}\PY{p}{(}\PY{n}{title} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Scatter plot of TOEFL.Score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+         \PY{n}{x} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{individuals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{TOEFL.Score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_63_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ggplot}\PY{p}{(}\PY{n}{csv}\PY{p}{,} \PY{n}{aes}\PY{p}{(}\PY{n}{x} \PY{o}{=} \PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}\PY{p}{)} \PY{o}{+} \PY{n}{geom\PYZus{}point}\PY{p}{(}\PY{p}{)} \PY{o}{+} 
+    \PY{n}{labs}\PY{p}{(}\PY{n}{title} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Scatter plot of University.Rating}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+         \PY{n}{x} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{individuals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{University.Rating}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_64_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ggplot}\PY{p}{(}\PY{n}{csv}\PY{p}{,} \PY{n}{aes}\PY{p}{(}\PY{n}{x} \PY{o}{=} \PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{)}\PY{p}{)} \PY{o}{+} \PY{n}{geom\PYZus{}point}\PY{p}{(}\PY{p}{)} \PY{o}{+} 
+    \PY{n}{labs}\PY{p}{(}\PY{n}{title} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Scatter plot of SOP}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{x} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{individuals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SOP}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_65_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ggplot}\PY{p}{(}\PY{n}{csv}\PY{p}{,} \PY{n}{aes}\PY{p}{(}\PY{n}{x} \PY{o}{=} \PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{]}\PY{p}{)}\PY{p}{)} \PY{o}{+} \PY{n}{geom\PYZus{}point}\PY{p}{(}\PY{p}{)} \PY{o}{+} 
+    \PY{n}{labs}\PY{p}{(}\PY{n}{title} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Scatter plot of LOR}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{x} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{individuals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{LOR}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_66_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ggplot}\PY{p}{(}\PY{n}{csv}\PY{p}{,} \PY{n}{aes}\PY{p}{(}\PY{n}{x} \PY{o}{=} \PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{7}\PY{p}{]}\PY{p}{)}\PY{p}{)} \PY{o}{+} \PY{n}{geom\PYZus{}point}\PY{p}{(}\PY{p}{)} \PY{o}{+} 
+    \PY{n}{labs}\PY{p}{(}\PY{n}{title} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Scatter plot of CGPA}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{x} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{individuals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{CGPA}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_67_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ggplot}\PY{p}{(}\PY{n}{csv}\PY{p}{,} \PY{n}{aes}\PY{p}{(}\PY{n}{x} \PY{o}{=} \PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{]}\PY{p}{)}\PY{p}{)} \PY{o}{+} \PY{n}{geom\PYZus{}point}\PY{p}{(}\PY{p}{)} \PY{o}{+} 
+    \PY{n}{labs}\PY{p}{(}\PY{n}{title} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Scatter plot of Research}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{x} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{individuals}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Research}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_68_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    We can see there are two methods to rank students : * The first one
+deals with continuous values, ranking people with numerical data. * The
+second one deals with categorical data (and more precisely ordinal
+data), using discrete action space.
+
+Those plots do not really helps us to interpret more informations but
+rather confirms what we could have seen in the data describing.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{correlation\PYZus{}pearson\PYZus{}csv} \PY{o}{\PYZlt{}}\PY{o}{\PYZhy{}} \PY{n}{melt}\PY{p}{(}\PY{n}{cor}\PY{p}{(}\PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} 
+                                    \PY{n}{method} \PY{o}{=} \PY{n}{c}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{pearson}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n}{correlation\PYZus{}kendall\PYZus{}csv} \PY{o}{\PYZlt{}}\PY{o}{\PYZhy{}} \PY{n}{melt}\PY{p}{(}\PY{n}{cor}\PY{p}{(}\PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} 
+                                    \PY{n}{method} \PY{o}{=} \PY{n}{c}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kendall}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n}{correlation\PYZus{}spearman\PYZus{}csv} \PY{o}{\PYZlt{}}\PY{o}{\PYZhy{}} \PY{n}{melt}\PY{p}{(}\PY{n}{cor}\PY{p}{(}\PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} 
+                                     \PY{n}{method} \PY{o}{=} \PY{n}{c}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{spearman}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ggplot}\PY{p}{(}\PY{n}{data} \PY{o}{=} \PY{n}{correlation\PYZus{}pearson\PYZus{}csv}\PY{p}{,} \PY{n}{aes}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{n}{Var1}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{n}{Var2}\PY{p}{,} \PY{n}{fill}\PY{o}{=}\PY{n}{value}\PY{p}{)}\PY{p}{)} \PY{o}{+} \PY{n}{geom\PYZus{}tile}\PY{p}{(}\PY{p}{)} \PY{o}{+} 
+    \PY{n}{theme}\PY{p}{(}\PY{n}{axis}\PY{o}{.}\PY{n}{text}\PY{o}{.}\PY{n}{x} \PY{o}{=} \PY{n}{element\PYZus{}text}\PY{p}{(}\PY{n}{angle} \PY{o}{=} \PY{l+m+mi}{90}\PY{p}{,} \PY{n}{vjust} \PY{o}{=} \PY{l+m+mf}{0.5}\PY{p}{,} \PY{n}{hjust}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)} \PY{o}{+} 
+    \PY{n}{labs}\PY{p}{(}\PY{n}{title} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Variables 1}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{x} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Variables 2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+         \PY{n}{y} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Pearson correlation matrix}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_71_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ggplot}\PY{p}{(}\PY{n}{data} \PY{o}{=} \PY{n}{correlation\PYZus{}kendall\PYZus{}csv}\PY{p}{,} \PY{n}{aes}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{n}{Var1}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{n}{Var2}\PY{p}{,} \PY{n}{fill}\PY{o}{=}\PY{n}{value}\PY{p}{)}\PY{p}{)} \PY{o}{+} \PY{n}{geom\PYZus{}tile}\PY{p}{(}\PY{p}{)} \PY{o}{+} 
+    \PY{n}{theme}\PY{p}{(}\PY{n}{axis}\PY{o}{.}\PY{n}{text}\PY{o}{.}\PY{n}{x} \PY{o}{=} \PY{n}{element\PYZus{}text}\PY{p}{(}\PY{n}{angle} \PY{o}{=} \PY{l+m+mi}{90}\PY{p}{,} \PY{n}{vjust} \PY{o}{=} \PY{l+m+mf}{0.5}\PY{p}{,} \PY{n}{hjust}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)} \PY{o}{+} 
+    \PY{n}{labs}\PY{p}{(}\PY{n}{title} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Variables 1}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{x} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Variables 2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+         \PY{n}{y} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Kendall correlation matrix}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_72_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ggplot}\PY{p}{(}\PY{n}{data} \PY{o}{=} \PY{n}{correlation\PYZus{}spearman\PYZus{}csv}\PY{p}{,} \PY{n}{aes}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{n}{Var1}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{n}{Var2}\PY{p}{,} \PY{n}{fill}\PY{o}{=}\PY{n}{value}\PY{p}{)}\PY{p}{)} \PY{o}{+} \PY{n}{geom\PYZus{}tile}\PY{p}{(}\PY{p}{)} \PY{o}{+} 
+    \PY{n}{theme}\PY{p}{(}\PY{n}{axis}\PY{o}{.}\PY{n}{text}\PY{o}{.}\PY{n}{x} \PY{o}{=} \PY{n}{element\PYZus{}text}\PY{p}{(}\PY{n}{angle} \PY{o}{=} \PY{l+m+mi}{90}\PY{p}{,} \PY{n}{vjust} \PY{o}{=} \PY{l+m+mf}{0.5}\PY{p}{,} \PY{n}{hjust}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)} \PY{o}{+} 
+    \PY{n}{labs}\PY{p}{(}\PY{n}{title} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Variables 1}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{x} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Variables 2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+         \PY{n}{y} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Spearman correlation matrix}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_73_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    As we can quickly see, there are some linear correlation following the 3
+indicators `Pearson, Kendall and Spearman'.
+
+\begin{itemize}
+\tightlist
+\item
+  GRE.Score, TOEFL.Score and CPGA are higly correlated one by one but
+  also to Chance of Admits. This means that those scores higly
+  determines the chances to be admitted by themselves.
+\end{itemize}
+
+Let's plot those variables in order to have a confirmation
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ggplot}\PY{p}{(}\PY{n}{csv}\PY{p}{,} \PY{n}{aes}\PY{p}{(}\PY{n}{x} \PY{o}{=} \PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}\PY{p}{)} \PY{o}{+} \PY{n}{geom\PYZus{}point}\PY{p}{(}\PY{p}{)} \PY{o}{+} 
+    \PY{n}{labs}\PY{p}{(}\PY{n}{title} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Scatter plot of GRE.Score and TOEFL.Score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+         \PY{n}{x} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{GRE.Score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{TOEFL.Score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_75_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ggplot}\PY{p}{(}\PY{n}{csv}\PY{p}{,} \PY{n}{aes}\PY{p}{(}\PY{n}{x} \PY{o}{=} \PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{7}\PY{p}{]}\PY{p}{)}\PY{p}{)} \PY{o}{+} \PY{n}{geom\PYZus{}point}\PY{p}{(}\PY{p}{)} \PY{o}{+} 
+    \PY{n}{labs}\PY{p}{(}\PY{n}{title} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Scatter plot of GRE.Score and CGPA}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{x} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{GRE.Score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+         \PY{n}{y} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{CGPA}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_76_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ggplot}\PY{p}{(}\PY{n}{csv}\PY{p}{,} \PY{n}{aes}\PY{p}{(}\PY{n}{x} \PY{o}{=} \PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{9}\PY{p}{]}\PY{p}{)}\PY{p}{)} \PY{o}{+} \PY{n}{geom\PYZus{}point}\PY{p}{(}\PY{p}{)} \PY{o}{+} 
+    \PY{n}{labs}\PY{p}{(}\PY{n}{title} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Scatter plot of GRE.Score and Chances.of.Admit}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+         \PY{n}{x} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{GRE.Score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Chances.of.Admit}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_77_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    We easily understand why linear regression could be a good approximation
+of this dataset seing those last plots.
+
+We could have continued with PCA and T-SNE data reduction in order to
+have more comprehension over the dataset. Since it's not the aim of this
+exercise, we will pursue with the linear regression.
+
+    \hypertarget{machine-learning}{%
+\subsubsection{Machine Learning}\label{machine-learning}}
+
+    \hypertarget{re-arranging-data}{%
+\paragraph{Re-arranging Data}\label{re-arranging-data}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Data are numbers ?}
+\PY{n+nb}{str}\PY{p}{(}\PY{n}{csv}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} train/test splitting}
+\PY{n}{inTrain} \PY{o}{=} \PY{n}{ml}\PY{p}{:}\PY{p}{:}\PY{n}{createDataPartition}\PY{p}{(}\PY{n}{y} \PY{o}{=} \PY{n}{csv}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{9}\PY{p}{]}\PY{p}{,} \PY{n}{p} \PY{o}{=} \PY{o}{.}\PY{l+m+mi}{80}\PY{p}{,} 
+                                  \PY{n+nb}{list} \PY{o}{=} \PY{n}{FALSE}\PY{p}{)}
+\PY{n}{train\PYZus{}csv} \PY{o}{\PYZlt{}}\PY{o}{\PYZhy{}} \PY{n}{csv}\PY{p}{[}\PY{n}{inTrain}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{:}\PY{n}{ncol}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{]}
+\PY{n}{test\PYZus{}csv} \PY{o}{\PYZlt{}}\PY{o}{\PYZhy{}} \PY{n}{csv}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{n}{inTrain}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{:}\PY{n}{ncol}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{]}
+\PY{n}{head}\PY{p}{(}\PY{n}{train\PYZus{}csv}\PY{p}{)}
+\PY{n}{head}\PY{p}{(}\PY{n}{test\PYZus{}csv}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{paste}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Train : }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{nrow}\PY{p}{(}\PY{n}{train\PYZus{}csv}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{paste}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Test : }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{nrow}\PY{p}{(}\PY{n}{test\PYZus{}csv}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+'data.frame':   400 obs. of  9 variables:
+ \$ Serial.No.       : int  1 2 3 4 5 6 7 8 9 10 {\ldots}
+ \$ GRE.Score        : int  337 324 316 322 314 330 321 308 302 323 {\ldots}
+ \$ TOEFL.Score      : int  118 107 104 110 103 115 109 101 102 108 {\ldots}
+ \$ University.Rating: int  4 4 3 3 2 5 3 2 1 3 {\ldots}
+ \$ SOP              : num  4.5 4 3 3.5 2 4.5 3 3 2 3.5 {\ldots}
+ \$ LOR              : num  4.5 4.5 3.5 2.5 3 3 4 4 1.5 3 {\ldots}
+ \$ CGPA             : num  9.65 8.87 8 8.67 8.21 9.34 8.2 7.9 8 8.6 {\ldots}
+ \$ Research         : int  1 1 1 1 0 1 1 0 0 0 {\ldots}
+ \$ Chance.of.Admit  : num  0.92 0.76 0.72 0.8 0.65 0.9 0.75 0.68 0.5 0.45 {\ldots}
+    \end{Verbatim}
+
+    \begin{tabular}{r|llllllll}
+  & GRE.Score & TOEFL.Score & University.Rating & SOP & LOR & CGPA & Research & Chance.of.Admit\\
+\hline
+	1 & 337  & 118  & 4    & 4.5  & 4.5  & 9.65 & 1    & 0.92\\
+	2 & 324  & 107  & 4    & 4.0  & 4.5  & 8.87 & 1    & 0.76\\
+	3 & 316  & 104  & 3    & 3.0  & 3.5  & 8.00 & 1    & 0.72\\
+	4 & 322  & 110  & 3    & 3.5  & 2.5  & 8.67 & 1    & 0.80\\
+	5 & 314  & 103  & 2    & 2.0  & 3.0  & 8.21 & 0    & 0.65\\
+	9 & 302  & 102  & 1    & 2.0  & 1.5  & 8.00 & 0    & 0.50\\
+\end{tabular}
+
+
+    
+    \begin{tabular}{r|llllllll}
+  & GRE.Score & TOEFL.Score & University.Rating & SOP & LOR & CGPA & Research & Chance.of.Admit\\
+\hline
+	6 & 330  & 115  & 5    & 4.5  & 3.0  & 9.34 & 1    & 0.90\\
+	7 & 321  & 109  & 3    & 3.0  & 4.0  & 8.20 & 1    & 0.75\\
+	8 & 308  & 101  & 2    & 3.0  & 4.0  & 7.90 & 0    & 0.68\\
+	11 & 325  & 106  & 3    & 3.5  & 4.0  & 8.40 & 1    & 0.52\\
+	12 & 327  & 111  & 4    & 4.0  & 4.5  & 9.00 & 1    & 0.84\\
+	13 & 328  & 112  & 4    & 4.0  & 4.5  & 9.10 & 1    & 0.78\\
+\end{tabular}
+
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+[1] "Train :  322"
+[1] "Test :  78"
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} First way of doing without any package}
+\PY{c+c1}{\PYZsh{} linearMod \PYZlt{}\PYZhy{} lm(Chance.of.Admit \PYZti{} ., data=train\PYZus{}csv)}
+\PY{c+c1}{\PYZsh{} summary(linearMod)}
+
+\PY{c+c1}{\PYZsh{} Second way of doing using caret\PYZhy{}lattice package}
+\PY{n}{fitControl} \PY{o}{\PYZlt{}}\PY{o}{\PYZhy{}} \PY{n}{ml}\PY{p}{:}\PY{p}{:}\PY{n}{trainControl}\PY{p}{(}\PY{n}{method} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{repeatedcv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{number} \PY{o}{=} \PY{l+m+mi}{3}\PY{p}{,} \PY{n}{repeats} \PY{o}{=} \PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{regress} \PY{o}{\PYZlt{}}\PY{o}{\PYZhy{}} \PY{n}{ml}\PY{p}{:}\PY{p}{:}\PY{n}{train}\PY{p}{(}\PY{n}{Chance}\PY{o}{.}\PY{n}{of}\PY{o}{.}\PY{n}{Admit} \PY{o}{\PYZti{}} \PY{o}{.}\PY{p}{,} \PY{n}{data} \PY{o}{=} \PY{n}{train\PYZus{}csv}\PY{p}{,} 
+                     \PY{n}{method} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{lm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{trControl} \PY{o}{=} \PY{n}{fitControl}\PY{p}{)}
+\PY{n}{summary}\PY{p}{(}\PY{n}{regress}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+Call:
+lm(formula = .outcome \textasciitilde{} ., data = dat)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.25747 -0.02338  0.00914  0.03599  0.16426 
+
+Coefficients:
+                    Estimate Std. Error t value Pr(>|t|)    
+(Intercept)       -1.1679569  0.1329307  -8.786  < 2e-16 ***
+GRE.Score          0.0013746  0.0006458   2.128 0.034080 *  
+TOEFL.Score        0.0027301  0.0012056   2.265 0.024222 *  
+University.Rating  0.0043070  0.0050164   0.859 0.391231    
+SOP               -0.0028466  0.0060599  -0.470 0.638860    
+LOR                0.0243216  0.0060538   4.018 7.36e-05 ***
+CGPA               0.1233330  0.0134632   9.161  < 2e-16 ***
+Research           0.0298928  0.0086033   3.475 0.000584 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.06283 on 314 degrees of freedom
+Multiple R-squared:  0.8084,	Adjusted R-squared:  0.8041 
+F-statistic: 189.3 on 7 and 314 DF,  p-value: < 2.2e-16
+
+    \end{Verbatim}
+
+    
+    as we can see, the P-values indicates us that some of the data are quite
+more relevant than others as we predicted with visualization : * LOR and
+CGPA have a really low p-value which means that the confidence that they
+predict well is high. * GRE.Score, TOEFL.Score and Research are also
+usefull but with a less confidence (still really high in this case). *
+University.Rating, SOP have a high p-values meaning that these are not
+good variables (confidence) to determines the chances of admission
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{y\PYZus{}pred} \PY{o}{\PYZlt{}}\PY{o}{\PYZhy{}} \PY{n}{predict}\PY{p}{(}\PY{n}{regress}\PY{p}{,} \PY{n}{newdata} \PY{o}{=} \PY{n}{test\PYZus{}csv}\PY{p}{)}
+\PY{n}{y\PYZus{}true} \PY{o}{\PYZlt{}}\PY{o}{\PYZhy{}} \PY{n}{test\PYZus{}csv}\PY{p}{[}\PY{p}{,}\PY{n}{ncol}\PY{p}{(}\PY{n}{test\PYZus{}csv}\PY{p}{)}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{25}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{print\PYZus{}res} \PY{o}{\PYZlt{}}\PY{o}{\PYZhy{}} \PY{n}{function}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{\PYZob{}}
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{paste0}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{RMSE =\PYZgt{} }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{round}\PY{p}{(}\PY{n}{metrics}\PY{p}{:}\PY{p}{:}\PY{n}{rmse}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{paste0}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{MSE  =\PYZgt{} }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{round}\PY{p}{(}\PY{n}{metrics}\PY{p}{:}\PY{p}{:}\PY{n}{mse}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{paste0}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{MBE  =\PYZgt{} }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{round}\PY{p}{(}\PY{n}{metrics}\PY{p}{:}\PY{p}{:}\PY{n}{bias}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{paste0}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{MAE  =\PYZgt{} }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{round}\PY{p}{(}\PY{n}{mean}\PY{p}{(}\PY{n}{Metrics}\PY{p}{:}\PY{p}{:}\PY{n}{ae}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{paste0}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{MAPE  =\PYZgt{} }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{round}\PY{p}{(}\PY{n}{mean}\PY{p}{(}\PY{n}{Metrics}\PY{p}{:}\PY{p}{:}\PY{n}{ape}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{paste0}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{R2   =\PYZgt{} }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{round}\PY{p}{(}\PY{n}{mlmetrics}\PY{p}{:}\PY{p}{:}\PY{n}{R2\PYZus{}Score}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{p}{\PYZcb{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{26}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{print\PYZus{}res}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+[1] "RMSE => 0.068"
+[1] "MSE  => 0.005"
+[1] "MBE  => -0.005"
+[1] "MAE  => 0.048"
+[1] "MAPE  => 0.077"
+[1] "R2   => 0.718"
+    \end{Verbatim}
+
+    The result are quite good on the test set, meaning that all errors
+indicators are quite low.
+
+    \hypertarget{support-vector-machine-svm}{%
+\paragraph{Support Vector Machine
+(SVM)}\label{support-vector-machine-svm}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{27}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fitControl} \PY{o}{\PYZlt{}}\PY{o}{\PYZhy{}} \PY{n}{ml}\PY{p}{:}\PY{p}{:}\PY{n}{trainControl}\PY{p}{(}\PY{n}{method} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{repeatedcv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{number} \PY{o}{=} \PY{l+m+mi}{3}\PY{p}{,} \PY{n}{repeats} \PY{o}{=} \PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{svm} \PY{o}{\PYZlt{}}\PY{o}{\PYZhy{}} \PY{n}{ml}\PY{p}{:}\PY{p}{:}\PY{n}{train}\PY{p}{(}\PY{n}{Chance}\PY{o}{.}\PY{n}{of}\PY{o}{.}\PY{n}{Admit} \PY{o}{\PYZti{}} \PY{o}{.}\PY{p}{,} \PY{n}{data} \PY{o}{=} \PY{n}{train\PYZus{}csv}\PY{p}{,} 
+                 \PY{n}{method}  \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{svmLinear}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{trControl} \PY{o}{=} \PY{n}{fitControl}\PY{p}{)}
+\PY{n}{summary}\PY{p}{(}\PY{n}{svm}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+Length  Class   Mode 
+     1   ksvm     S4 
+    \end{Verbatim}
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{28}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{y\PYZus{}pred} \PY{o}{\PYZlt{}}\PY{o}{\PYZhy{}} \PY{n}{predict}\PY{p}{(}\PY{n}{svm}\PY{p}{,} \PY{n}{newdata} \PY{o}{=} \PY{n}{test\PYZus{}csv}\PY{p}{)}
+\PY{n}{y\PYZus{}true} \PY{o}{\PYZlt{}}\PY{o}{\PYZhy{}} \PY{n}{test\PYZus{}csv}\PY{p}{[}\PY{p}{,}\PY{n}{ncol}\PY{p}{(}\PY{n}{test\PYZus{}csv}\PY{p}{)}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{29}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{print\PYZus{}res}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+[1] "RMSE => 0.069"
+[1] "MSE  => 0.005"
+[1] "MBE  => -0.014"
+[1] "MAE  => 0.047"
+[1] "MAPE  => 0.078"
+[1] "R2   => 0.688"
+    \end{Verbatim}
+
+    The result are quite good on the test set, but not better than the basic
+linear regression.
+
+    \hypertarget{xgboost}{%
+\paragraph{XGBoost}\label{xgboost}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{30}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fitControl} \PY{o}{\PYZlt{}}\PY{o}{\PYZhy{}} \PY{n}{ml}\PY{p}{:}\PY{p}{:}\PY{n}{trainControl}\PY{p}{(}\PY{n}{method} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{repeatedcv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{number} \PY{o}{=} \PY{l+m+mi}{3}\PY{p}{,} \PY{n}{repeats} \PY{o}{=} \PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{svm} \PY{o}{\PYZlt{}}\PY{o}{\PYZhy{}} \PY{n}{ml}\PY{p}{:}\PY{p}{:}\PY{n}{train}\PY{p}{(}\PY{n}{Chance}\PY{o}{.}\PY{n}{of}\PY{o}{.}\PY{n}{Admit} \PY{o}{\PYZti{}} \PY{o}{.}\PY{p}{,} \PY{n}{data} \PY{o}{=} \PY{n}{train\PYZus{}csv}\PY{p}{,} 
+                 \PY{n}{method}  \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{xgbTree}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{trControl} \PY{o}{=} \PY{n}{fitControl}\PY{p}{)}
+\PY{n}{summary}\PY{p}{(}\PY{n}{svm}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+              Length Class              Mode       
+handle            1  xgb.Booster.handle externalptr
+raw           13359  -none-             raw        
+niter             1  -none-             numeric    
+call              5  -none-             call       
+params            8  -none-             list       
+callbacks         1  -none-             list       
+feature\_names     7  -none-             character  
+nfeatures         1  -none-             numeric    
+xNames            7  -none-             character  
+problemType       1  -none-             character  
+tuneValue         7  data.frame         list       
+obsLevels         1  -none-             logical    
+param             0  -none-             list       
+    \end{Verbatim}
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{31}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{y\PYZus{}pred} \PY{o}{\PYZlt{}}\PY{o}{\PYZhy{}} \PY{n}{predict}\PY{p}{(}\PY{n}{svm}\PY{p}{,} \PY{n}{newdata} \PY{o}{=} \PY{n}{test\PYZus{}csv}\PY{p}{)}
+\PY{n}{y\PYZus{}true} \PY{o}{\PYZlt{}}\PY{o}{\PYZhy{}} \PY{n}{test\PYZus{}csv}\PY{p}{[}\PY{p}{,}\PY{n}{ncol}\PY{p}{(}\PY{n}{test\PYZus{}csv}\PY{p}{)}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{32}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{print\PYZus{}res}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+[1] "RMSE => 0.074"
+[1] "MSE  => 0.005"
+[1] "MBE  => -0.009"
+[1] "MAE  => 0.052"
+[1] "MAPE  => 0.084"
+[1] "R2   => 0.633"
+    \end{Verbatim}
+
+    \hypertarget{conclusion-of-the-report}{%
+\subsection{Conclusion of the report}\label{conclusion-of-the-report}}
+
+We had the opportunity to see both how to handle classification and
+regression models using Sklearn(Python) and caret(R). We also learnt
+about metrics and how to interpret them.
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}

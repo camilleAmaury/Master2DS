@@ -1,0 +1,12 @@
+digraph Tree {
+node [shape=box] ;
+0 [label="Outlook_rain <= 0.5\ngini = 0.459\nsamples = 14\nvalue = [9, 5]\nclass = Umbrella"] ;
+1 [label="Outlook_overcast <= 0.5\ngini = 0.494\nsamples = 9\nvalue = [4, 5]\nclass = No umbrella"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+2 [label="gini = 0.0\nsamples = 5\nvalue = [0, 5]\nclass = No umbrella"] ;
+1 -> 2 ;
+3 [label="gini = 0.0\nsamples = 4\nvalue = [4, 0]\nclass = Umbrella"] ;
+1 -> 3 ;
+4 [label="gini = 0.0\nsamples = 5\nvalue = [5, 0]\nclass = Umbrella"] ;
+0 -> 4 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+}

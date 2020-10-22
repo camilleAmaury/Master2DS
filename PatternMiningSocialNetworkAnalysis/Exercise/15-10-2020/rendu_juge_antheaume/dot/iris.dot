@@ -1,0 +1,28 @@
+digraph Tree {
+node [shape=box] ;
+0 [label="PetalWidthCm <= 0.7\ngini = 0.666\nsamples = 112\nvalue = [35, 37, 40]\nclass = virginica"] ;
+1 [label="gini = 0.0\nsamples = 35\nvalue = [35, 0, 0]\nclass = setosa"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+2 [label="PetalWidthCm <= 1.7\ngini = 0.499\nsamples = 77\nvalue = [0, 37, 40]\nclass = virginica"] ;
+0 -> 2 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+3 [label="PetalLengthCm <= 4.95\ngini = 0.053\nsamples = 37\nvalue = [0, 36, 1]\nclass = versicolor"] ;
+2 -> 3 ;
+4 [label="gini = 0.0\nsamples = 35\nvalue = [0, 35, 0]\nclass = versicolor"] ;
+3 -> 4 ;
+5 [label="PetalLengthCm <= 5.05\ngini = 0.5\nsamples = 2\nvalue = [0, 1, 1]\nclass = versicolor"] ;
+3 -> 5 ;
+6 [label="gini = 0.0\nsamples = 1\nvalue = [0, 0, 1]\nclass = virginica"] ;
+5 -> 6 ;
+7 [label="gini = 0.0\nsamples = 1\nvalue = [0, 1, 0]\nclass = versicolor"] ;
+5 -> 7 ;
+8 [label="PetalLengthCm <= 4.85\ngini = 0.049\nsamples = 40\nvalue = [0, 1, 39]\nclass = virginica"] ;
+2 -> 8 ;
+9 [label="SepalLengthCm <= 5.95\ngini = 0.444\nsamples = 3\nvalue = [0, 1, 2]\nclass = virginica"] ;
+8 -> 9 ;
+10 [label="gini = 0.0\nsamples = 1\nvalue = [0, 1, 0]\nclass = versicolor"] ;
+9 -> 10 ;
+11 [label="gini = 0.0\nsamples = 2\nvalue = [0, 0, 2]\nclass = virginica"] ;
+9 -> 11 ;
+12 [label="gini = 0.0\nsamples = 37\nvalue = [0, 0, 37]\nclass = virginica"] ;
+8 -> 12 ;
+}
