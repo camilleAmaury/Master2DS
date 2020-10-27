@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<smile version="1.0" id="Network2" numsamples="10000" discsamples="10000">
+	<nodes>
+		<cpt id="A">
+			<state id="A0" />
+			<state id="A1" />
+			<probabilities>0.5111111111111111 0.4888888888888889</probabilities>
+		</cpt>
+		<cpt id="D">
+			<state id="D0" />
+			<state id="D1" />
+			<probabilities>0.52 0.48</probabilities>
+		</cpt>
+		<cpt id="B">
+			<state id="B0" />
+			<state id="B1" />
+			<parents>D A</parents>
+			<probabilities>0.7142857142857143 0.2857142857142857 0.8 0.2 0.1818181818181818 0.8181818181818181 0.1818181818181818 0.8181818181818181</probabilities>
+		</cpt>
+		<cpt id="C">
+			<state id="C0" />
+			<state id="C1" />
+			<parents>D</parents>
+			<probabilities>0.52 0.48 0.5217391304347826 0.4782608695652174</probabilities>
+		</cpt>
+	</nodes>
+	<extensions>
+		<genie version="1.0" app="GeNIe This network was created in GeNIe Academic, which can be used for academic teaching and research purposes only" name="Network2">
+			<node id="A">
+				<name>A</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>204 103 238 124</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="B">
+				<name>B</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>290 257 324 278</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="C">
+				<name>C</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>553 258 587 279</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="D">
+				<name>D</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>454 96 488 117</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+		</genie>
+	</extensions>
+</smile>
