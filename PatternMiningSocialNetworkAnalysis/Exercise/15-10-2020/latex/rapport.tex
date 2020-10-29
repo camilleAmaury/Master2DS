@@ -622,9 +622,15 @@ Error}\label{mean-absolute-pourcentage-error}}
     \hypertarget{hold-out-cross-validation}{%
 \paragraph{Hold Out Cross Validation}\label{hold-out-cross-validation}}
 
-Separate the dataset in two sub-datasets : * Training Set is used to
-train the model. * Testing Set is used to validate the model with
-indicators.
+Separate the dataset in two sub-datasets :
+
+\begin{itemize}
+\tightlist
+\item
+  Training Set is used to train the model.
+\item
+  Testing Set is used to validate the model with indicators.
+\end{itemize}
 
 The splitting is done with a percentage of the initial dataset (for
 instance 80\%/20\%).
@@ -637,9 +643,17 @@ configuration in our sub-datasets.
 \paragraph{K-Fold Cross Validation}\label{k-fold-cross-validation}}
 
 Separate the dataset S in k sub-datasets, then each subsets contains N/k
-individuals. Thus, we iterate k times on all sub-datasets : * we create
-a training set with k-1 sub-datasets * we create a testing set with the
-last sub-datasets * we compute the empirical error
+individuals. Thus, we iterate k times on all sub-datasets :
+
+\begin{itemize}
+\tightlist
+\item
+  we create a training set with k-1 sub-datasets
+\item
+  we create a testing set with the last sub-datasets
+\item
+  we compute the empirical error
+\end{itemize}
 
 When the k-iterations are done, we compute the mean of the empirical
 error. The we have a stable validation indicator over multiple
@@ -672,8 +686,7 @@ Python}\label{classification-with-python}}
 
 I modified the Mushroom dataset to be a xlsx because there were way too
 many different inputs and I couldn't find one that would make the
-process easier to us. Here's the download link for the xls version :
-`https://tinyurl.com/y68krwbw'
+process easier to us.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{31}{\boxspacing}
@@ -1238,10 +1251,17 @@ Let's check for outliers over our dataset :
     \end{center}
     { \hspace*{\fill} \\}
     
-    We can see there are two methods to rank students : * The first one
-deals with continuous values, ranking people with numerical data. * The
-second one deals with categorical data (and more precisely ordinal
-data), using discrete action space.
+    We can see there are two methods to rank students :
+
+\begin{itemize}
+\tightlist
+\item
+  The first one deals with continuous values, ranking people with
+  numerical data.
+\item
+  The second one deals with categorical data (and more precisely ordinal
+  data), using discrete action space.
+\end{itemize}
 
 Those plots do not really helps us to interpret more informations but
 rather confirms what we could have seen in the data describing.
@@ -1478,12 +1498,20 @@ F-statistic: 189.3 on 7 and 314 DF,  p-value: < 2.2e-16
 
     
     as we can see, the P-values indicates us that some of the data are quite
-more relevant than others as we predicted with visualization : * LOR and
-CGPA have a really low p-value which means that the confidence that they
-predict well is high. * GRE.Score, TOEFL.Score and Research are also
-usefull but with a less confidence (still really high in this case). *
-University.Rating, SOP have a high p-values meaning that these are not
-good variables (confidence) to determines the chances of admission
+more relevant than others as we predicted with visualization :
+
+\begin{itemize}
+\tightlist
+\item
+  LOR and CGPA have a really low p-value which means that the confidence
+  that they predict well is high.
+\item
+  GRE.Score, TOEFL.Score and Research are also usefull but with a less
+  confidence (still really high in this case).
+\item
+  University.Rating, SOP have a high p-values meaning that these are not
+  good variables (confidence) to determines the chances of admission
+\end{itemize}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{24}{\boxspacing}
