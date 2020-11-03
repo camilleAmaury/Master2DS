@@ -1,0 +1,1813 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Report}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{report-2-clustering}{%
+\section{Report 2 : Clustering}\label{report-2-clustering}}
+
+Clément Antheaume, Camille-Amaury Juge.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{from} \PY{n}{IPython.display} \PY{n}{import} \PY{n}{Image}
+\PY{n+nf}{display}\PY{p}{(}\PY{n+nf}{Image}\PY{p}{(}\PY{n}{filename}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{images/nantes.png\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{definition-of-indicators}{%
+\subsection{Definition of indicators}\label{definition-of-indicators}}
+
+    \hypertarget{continuous}{%
+\subsection{Continuous}\label{continuous}}
+
+    \hypertarget{silhouette-coefficient}{%
+\paragraph{Silhouette coefficient :}\label{silhouette-coefficient}}
+
+    \begin{itemize}
+\tightlist
+\item
+  Average distance of an individual to his suspected class minus the
+  average distance with points from other groups.
+\item
+  Is in the {[}-1; 1{]} scope. If the difference is negative, the point
+  is then considered misclassed.
+\item
+  1 is the best coefficient possible, meaning the point is well classed
+  and -1 the worst, meaning the point can't be more misclassed.
+\end{itemize}
+
+    \hypertarget{dunn-index}{%
+\paragraph{Dunn Index :}\label{dunn-index}}
+
+    \begin{itemize}
+\tightlist
+\item
+  Is equal to the maximun distance between two individuals of the same
+  class divided by the minimum distance between two indivudual from
+  different classes.
+\item
+  Any metric can be used, such as Euclidian distance, Manhattan
+  distance, Mahalanobis distance\ldots{}
+\item
+  Is in the {[}0; +infinite{]} scope, with 0 being the worst score
+  possible.
+\end{itemize}
+
+    \hypertarget{davies-bouldin-index}{%
+\paragraph{Davies-Bouldin Index :}\label{davies-bouldin-index}}
+
+    \begin{itemize}
+\tightlist
+\item
+  Is the distance of a individual to the center of its cluster divided
+  by the distance between 2 groups' centers
+\item
+  Is in the {[}0; +infinite{]} scope, with 0 being the best score
+  possible.
+\end{itemize}
+
+    \hypertarget{discrete}{%
+\subsubsection{Discrete}\label{discrete}}
+
+    \hypertarget{modularity}{%
+\paragraph{Modularity :}\label{modularity}}
+
+    \begin{itemize}
+\tightlist
+\item
+  Measure the strength of a network/graph division.
+\item
+  The Modularity matrix is equal to the number of edges between two
+  nodes minus the expected number of edges between them, which is equal
+  to the product of their degrees divided by 2 times the number of edges
+  in the graph.
+\item
+  Fails to resolve small communities because the optimization part often
+  merge small communities together.
+\end{itemize}
+
+    \hypertarget{v-measure}{%
+\paragraph{V-measure :}\label{v-measure}}
+
+    \begin{itemize}
+\tightlist
+\item
+  Harmonic mean between homogenity and completeness
+\item
+  Can be computed if you know the labels of the clustered data
+\item
+  (1+beta) * homogenity * completeness / (beta * homogenity +
+  completeness)
+\end{itemize}
+
+    \hypertarget{validation-techniques}{%
+\subsubsection{Validation Techniques}\label{validation-techniques}}
+
+    \hypertarget{bootstrapping}{%
+\paragraph{Bootstrapping}\label{bootstrapping}}
+
+    \begin{itemize}
+\tightlist
+\item
+  The bootstrapping technique is about resampling the data a huge number
+  of times. The resampled data is usually the same size of the initial
+  data, with a random order and even duplicated data.
+\item
+  On each sample, several statistics can be calculated, such as mean,
+  variance, randindex or distances to the center.
+\end{itemize}
+
+    \hypertarget{jack-knife}{%
+\paragraph{Jack-knife}\label{jack-knife}}
+
+    \begin{itemize}
+\tightlist
+\item
+  The Jack-knife method is a very versatile method used to every. It
+  consists in removing a small sample of the dataset and trying to
+  recompute its statistics, just like a the method above.
+\end{itemize}
+
+    \hypertarget{external-cluster-validation}{%
+\paragraph{External cluster
+validation}\label{external-cluster-validation}}
+
+    \begin{itemize}
+\tightlist
+\item
+  Removing the labels of a classification problem, applying a clustering
+  algorithm and compare the predicted class of the individuals to the
+  removed one.
+\end{itemize}
+
+    \hypertarget{python-part}{%
+\subsection{Python Part}\label{python-part}}
+
+    \hypertarget{imports}{%
+\subsubsection{Imports}\label{imports}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{import} \PY{n}{pandas} \PY{n}{as} \PY{n}{pd}
+\PY{n}{from} \PY{n}{sklearn.cluster} \PY{n}{import} \PY{n}{KMeans}
+\PY{n}{import} \PY{n}{numpy} \PY{n}{as} \PY{n}{np}
+\PY{n}{import} \PY{n}{matplotlib.pyplot} \PY{n}{as} \PY{n}{plt}
+\PY{n}{from} \PY{n}{sklearn} \PY{n}{import} \PY{n}{metrics}
+\PY{n}{from} \PY{n}{yellowbrick.cluster} \PY{n}{import} \PY{n}{KElbowVisualizer}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+C:\textbackslash{}Users\textbackslash{}CAJug\textbackslash{}anaconda3\textbackslash{}envs\textbackslash{}R\_py37\textbackslash{}lib\textbackslash{}site-
+packages\textbackslash{}sklearn\textbackslash{}utils\textbackslash{}deprecation.py:143: FutureWarning: The
+sklearn.metrics.classification module is  deprecated in version 0.22 and will be
+removed in version 0.24. The corresponding classes / functions should instead be
+imported from sklearn.metrics. Anything that cannot be imported from
+sklearn.metrics is now part of the private API.
+  warnings.warn(message, FutureWarning)
+    \end{Verbatim}
+
+    \hypertarget{datasets-meteo}{%
+\subsubsection{Datasets Meteo}\label{datasets-meteo}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{features} \PY{o}{=} \PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{Outlook\PYZsq{}}\PY{p}{,}\PY{l+s}{\PYZsq{}}\PY{l+s}{Tempreature\PYZsq{}}\PY{p}{,}\PY{l+s}{\PYZsq{}}\PY{l+s}{Humidity\PYZsq{}}\PY{p}{,}\PY{l+s}{\PYZsq{}}\PY{l+s}{Windy\PYZsq{}}\PY{p}{]}
+\PY{n}{classes} \PY{o}{=} \PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{Umbrella\PYZsq{}}\PY{p}{,}\PY{l+s}{\PYZsq{}}\PY{l+s}{No umbrella\PYZsq{}}\PY{p}{]}
+
+\PY{n}{dic\PYZus{}X} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s}{\PYZsq{}}\PY{l+s}{sunny\PYZsq{}} \PY{o}{:} \PY{l+m}{0}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{overcast\PYZsq{}} \PY{o}{:} \PY{l+m}{1}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{rain\PYZsq{}} \PY{o}{:} \PY{l+m}{2}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{cool\PYZsq{}} \PY{o}{:} \PY{l+m}{0}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{mild\PYZsq{}} \PY{o}{:} \PY{l+m}{1}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{hot\PYZsq{}} \PY{o}{:} \PY{l+m}{2}\PY{p}{,} \PY{n}{True} \PY{o}{:} \PY{l+m}{1}\PY{p}{,} \PY{n}{False} \PY{o}{:} \PY{l+m}{0}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{high\PYZsq{}} \PY{o}{:} \PY{l+m}{1}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{normal\PYZsq{}} \PY{o}{:} \PY{l+m}{0}\PY{p}{\PYZcb{}}
+\PY{n}{dic\PYZus{}Y} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s}{\PYZsq{}}\PY{l+s}{N\PYZsq{}} \PY{o}{:} \PY{l+m}{0}\PY{p}{,} \PY{l+s}{\PYZsq{}}\PY{l+s}{P\PYZsq{}} \PY{o}{:} \PY{l+m}{1}\PY{p}{\PYZcb{}}
+
+\PY{n}{data} \PY{o}{=} \PY{n+nf}{pd.read\PYZus{}excel}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{data/Meteo.xls\PYZsq{}}\PY{p}{)}
+\PY{n}{X} \PY{o}{=} \PY{n}{data.iloc}\PY{p}{[}\PY{o}{:}\PY{p}{,}\PY{l+m}{1}\PY{o}{:}\PY{l+m}{\PYZhy{}1}\PY{p}{]}
+\PY{n}{Y} \PY{o}{=} \PY{n}{data.iloc}\PY{p}{[}\PY{o}{:}\PY{p}{,}\PY{l+m}{\PYZhy{}1}\PY{p}{]}
+
+\PY{n}{X2} \PY{o}{=} \PY{n+nf}{X.replace}\PY{p}{(}\PY{n}{dic\PYZus{}X}\PY{p}{)}
+\PY{n}{Y2} \PY{o}{=} \PY{n+nf}{Y.replace}\PY{p}{(}\PY{n}{dic\PYZus{}Y}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{data.head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+   ID   Outlook Tempreature Humidity  Windy Class
+0   1     sunny         hot     high  False     N
+1   2     sunny         hot     high   True     N
+2   3  overcast         hot     high  False     P
+3   4      rain        mild     high  False     P
+4   5      rain        cool   normal  False     P
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{kmeans} \PY{o}{=} \PY{n+nf}{KMeans}\PY{p}{(}\PY{n}{n\PYZus{}clusters}\PY{o}{=}\PY{l+m}{2}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{l+m}{0}\PY{p}{)}\PY{n+nf}{.fit}\PY{p}{(}\PY{n}{X2}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{print}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Homogenity :\PYZdq{}}\PY{p}{,} \PY{n+nf}{metrics.homogeneity\PYZus{}score}\PY{p}{(}\PY{n}{Y2}\PY{p}{,} \PY{n}{kmeans.labels\PYZus{}}\PY{p}{)}\PY{p}{,} 
+      \PY{l+s}{\PYZdq{}}\PY{l+s}{| Completeness :\PYZdq{}}\PY{p}{,} \PY{n+nf}{metrics.completeness\PYZus{}score}\PY{p}{(}\PY{n}{Y2}\PY{p}{,} \PY{n}{kmeans.labels\PYZus{}}\PY{p}{)}\PY{p}{)}
+\PY{n+nf}{print}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{V\PYZhy{}measure :\PYZdq{}}\PY{p}{,} \PY{n+nf}{metrics.v\PYZus{}measure\PYZus{}score}\PY{p}{(}\PY{n}{Y2}\PY{p}{,} \PY{n}{kmeans.labels\PYZus{}}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Homogenity : 0.0014248244292990396 | Completeness : 0.0013598296226430605
+V-measure : 0.0013915685251279558
+    \end{Verbatim}
+
+    \hypertarget{dataset-mushrooms}{%
+\subsubsection{Dataset Mushrooms}\label{dataset-mushrooms}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{classes} \PY{o}{=} \PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{Comestible\PYZsq{}}\PY{p}{,}\PY{l+s}{\PYZsq{}}\PY{l+s}{Non comestible\PYZsq{}}\PY{p}{]}
+\PY{n}{data} \PY{o}{=} \PY{n+nf}{pd.read\PYZus{}csv}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{data/Mushroom.csv\PYZsq{}}\PY{p}{)}
+\PY{n}{X} \PY{o}{=} \PY{n}{data.iloc}\PY{p}{[}\PY{o}{:}\PY{p}{,} \PY{l+m}{1}\PY{o}{:}\PY{l+m}{\PYZhy{}1}\PY{p}{]}
+\PY{n}{Y} \PY{o}{=} \PY{n}{data.iloc}\PY{p}{[}\PY{o}{:}\PY{p}{,}\PY{l+m}{\PYZhy{}1}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{data.head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+   Id  Odorant  Anneau  Chapeau bombe  Piedlarge  Taches  Comestible
+0   1        1       0              1          1       0           1
+1   2        1       0              1          1       1           1
+2   3        0       0              1          1       1           1
+3   4        1       0              0          1       1           0
+4   5        0       0              1          1       0           1
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{kmeans} \PY{o}{=} \PY{n+nf}{KMeans}\PY{p}{(}\PY{n}{n\PYZus{}clusters}\PY{o}{=}\PY{l+m}{2}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{l+m}{0}\PY{p}{)}\PY{n+nf}{.fit}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{print}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Homogenity :\PYZdq{}}\PY{p}{,} \PY{n+nf}{metrics.homogeneity\PYZus{}score}\PY{p}{(}\PY{n}{Y}\PY{p}{,} \PY{n}{kmeans.labels\PYZus{}}\PY{p}{)}\PY{p}{,} 
+      \PY{l+s}{\PYZdq{}}\PY{l+s}{| Completeness :\PYZdq{}}\PY{p}{,} \PY{n+nf}{metrics.completeness\PYZus{}score}\PY{p}{(}\PY{n}{Y}\PY{p}{,} \PY{n}{kmeans.labels\PYZus{}}\PY{p}{)}\PY{p}{)}
+\PY{n+nf}{print}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{V\PYZhy{}measure :\PYZdq{}}\PY{p}{,} \PY{n+nf}{metrics.v\PYZus{}measure\PYZus{}score}\PY{p}{(}\PY{n}{Y}\PY{p}{,} \PY{n}{kmeans.labels\PYZus{}}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Homogenity : 0.008613264733993205 | Completeness : 0.007131315506727338
+V-measure : 0.007802546326666939
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{print}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Scores : Silhouette, Davies Bouldin\PYZdq{}}\PY{p}{)}
+\PY{n+nf}{metrics.silhouette\PYZus{}score}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{kmeans.labels\PYZus{}}\PY{p}{)}\PY{p}{,} \PY{n+nf}{metrics.davies\PYZus{}bouldin\PYZus{}score}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{kmeans.labels\PYZus{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Scores : Silhouette, Davies Bouldin
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+(0.29605442672133603, 1.5305580696350314)
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{results}{%
+\subsubsection{Results}\label{results}}
+
+In the given examples, kmeans with two clusters dosen't seem to separate
+well our classes in the expected groups, wether we chose to label 1 as 1
+or 1 as 0. There are a lot of differences on theses basic dataframes.
+
+    \hypertarget{explanation}{%
+\subsubsection{Explanation}\label{explanation}}
+
+Because our dataframes are small and we already know which classes we
+are expecting, clustering is not an appropriate solution to get any
+information. Because our data is structured, it is easier and more
+accurate to use classification in order to predict our classes.
+
+Now, let's try with another dataset, made of random numbers (unorganized
+data) and try a few kmeans iterations to find out a good cluster number
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{data} \PY{o}{=} \PY{n+nf}{np.random.rand}\PY{p}{(}\PY{l+m}{100}\PY{p}{,}\PY{l+m}{2}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fig} \PY{o}{=} \PY{n+nf}{plt.figure}\PY{p}{(}\PY{p}{)}
+\PY{n}{kmeans} \PY{o}{=} \PY{n+nf}{KMeans}\PY{p}{(}\PY{n}{n\PYZus{}clusters}\PY{o}{=}\PY{l+m}{2}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{l+m}{0}\PY{p}{)}\PY{n+nf}{.fit}\PY{p}{(}\PY{n}{data}\PY{p}{)}
+\PY{n+nf}{plt.scatter}\PY{p}{(}\PY{n}{data}\PY{p}{[}\PY{o}{:}\PY{p}{,}\PY{l+m}{0}\PY{p}{]}\PY{p}{,}\PY{n}{data}\PY{p}{[}\PY{o}{:}\PY{p}{,}\PY{l+m}{1}\PY{p}{]}\PY{p}{,}\PY{n}{c}\PY{o}{=}\PY{n}{kmeans.labels\PYZus{}}\PY{p}{)}
+\PY{n+nf}{plt.scatter}\PY{p}{(}\PY{n}{kmeans.cluster\PYZus{}centers\PYZus{}}\PY{p}{[}\PY{o}{:}\PY{p}{,}\PY{l+m}{0}\PY{p}{]}\PY{p}{,}\PY{n}{kmeans.cluster\PYZus{}centers\PYZus{}}\PY{p}{[}\PY{o}{:}\PY{p}{,}\PY{l+m}{1}\PY{p}{]}\PY{p}{,}\PY{n}{c}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{r\PYZsq{}}\PY{p}{)}
+\PY{n+nf}{plt.show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_39_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fig} \PY{o}{=} \PY{n+nf}{plt.figure}\PY{p}{(}\PY{p}{)}
+\PY{n}{kmeans} \PY{o}{=} \PY{n+nf}{KMeans}\PY{p}{(}\PY{n}{n\PYZus{}clusters}\PY{o}{=}\PY{l+m}{3}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{l+m}{0}\PY{p}{)}\PY{n+nf}{.fit}\PY{p}{(}\PY{n}{data}\PY{p}{)}
+\PY{n+nf}{plt.scatter}\PY{p}{(}\PY{n}{data}\PY{p}{[}\PY{o}{:}\PY{p}{,}\PY{l+m}{0}\PY{p}{]}\PY{p}{,}\PY{n}{data}\PY{p}{[}\PY{o}{:}\PY{p}{,}\PY{l+m}{1}\PY{p}{]}\PY{p}{,}\PY{n}{c}\PY{o}{=}\PY{n}{kmeans.labels\PYZus{}}\PY{p}{)}
+\PY{n+nf}{plt.scatter}\PY{p}{(}\PY{n}{kmeans.cluster\PYZus{}centers\PYZus{}}\PY{p}{[}\PY{o}{:}\PY{p}{,}\PY{l+m}{0}\PY{p}{]}\PY{p}{,}\PY{n}{kmeans.cluster\PYZus{}centers\PYZus{}}\PY{p}{[}\PY{o}{:}\PY{p}{,}\PY{l+m}{1}\PY{p}{]}\PY{p}{,}\PY{n}{c}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{r\PYZsq{}}\PY{p}{)}
+\PY{n+nf}{plt.show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_40_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fig} \PY{o}{=} \PY{n+nf}{plt.figure}\PY{p}{(}\PY{p}{)}
+\PY{n}{kmeans} \PY{o}{=} \PY{n+nf}{KMeans}\PY{p}{(}\PY{n}{n\PYZus{}clusters}\PY{o}{=}\PY{l+m}{5}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{l+m}{0}\PY{p}{)}\PY{n+nf}{.fit}\PY{p}{(}\PY{n}{data}\PY{p}{)}
+\PY{n+nf}{plt.scatter}\PY{p}{(}\PY{n}{data}\PY{p}{[}\PY{o}{:}\PY{p}{,}\PY{l+m}{0}\PY{p}{]}\PY{p}{,}\PY{n}{data}\PY{p}{[}\PY{o}{:}\PY{p}{,}\PY{l+m}{1}\PY{p}{]}\PY{p}{,}\PY{n}{c}\PY{o}{=}\PY{n}{kmeans.labels\PYZus{}}\PY{p}{)}
+\PY{n+nf}{plt.scatter}\PY{p}{(}\PY{n}{kmeans.cluster\PYZus{}centers\PYZus{}}\PY{p}{[}\PY{o}{:}\PY{p}{,}\PY{l+m}{0}\PY{p}{]}\PY{p}{,}\PY{n}{kmeans.cluster\PYZus{}centers\PYZus{}}\PY{p}{[}\PY{o}{:}\PY{p}{,}\PY{l+m}{1}\PY{p}{]}\PY{p}{,}\PY{n}{c}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{r\PYZsq{}}\PY{p}{)}
+\PY{n+nf}{plt.show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_41_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fig} \PY{o}{=} \PY{n+nf}{plt.figure}\PY{p}{(}\PY{p}{)}
+\PY{n}{kmeans} \PY{o}{=} \PY{n+nf}{KMeans}\PY{p}{(}\PY{n}{n\PYZus{}clusters}\PY{o}{=}\PY{l+m}{10}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{l+m}{0}\PY{p}{)}\PY{n+nf}{.fit}\PY{p}{(}\PY{n}{data}\PY{p}{)}
+\PY{n+nf}{plt.scatter}\PY{p}{(}\PY{n}{data}\PY{p}{[}\PY{o}{:}\PY{p}{,}\PY{l+m}{0}\PY{p}{]}\PY{p}{,}\PY{n}{data}\PY{p}{[}\PY{o}{:}\PY{p}{,}\PY{l+m}{1}\PY{p}{]}\PY{p}{,}\PY{n}{c}\PY{o}{=}\PY{n}{kmeans.labels\PYZus{}}\PY{p}{)}
+\PY{n+nf}{plt.scatter}\PY{p}{(}\PY{n}{kmeans.cluster\PYZus{}centers\PYZus{}}\PY{p}{[}\PY{o}{:}\PY{p}{,}\PY{l+m}{0}\PY{p}{]}\PY{p}{,}\PY{n}{kmeans.cluster\PYZus{}centers\PYZus{}}\PY{p}{[}\PY{o}{:}\PY{p}{,}\PY{l+m}{1}\PY{p}{]}\PY{p}{,}\PY{n}{c}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{r\PYZsq{}}\PY{p}{)}
+\PY{n+nf}{plt.show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_42_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Just like classification, with a big k, k-means is creating cluster
+which fits the data so much a prediction wouldn't be accurate because of
+the clusters being so close from each other. So how to find a good k?
+
+We can use for example the elbow rule, which computes the distortion or
+the silhouette for each k possible in a given coutinuous set
+
+    \hypertarget{clustering-validation}{%
+\subsection{Clustering Validation}\label{clustering-validation}}
+
+Before trying to explore a validation technique stated above, we are
+going to use the elbow method to determine an approximative k in a given
+range to see which k would allow us to create great clusters.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{visualizer} \PY{o}{=} \PY{n+nf}{KElbowVisualizer}\PY{p}{(}\PY{n}{kmeans}\PY{p}{,} \PY{n}{k}\PY{o}{=}\PY{p}{(}\PY{l+m}{2}\PY{p}{,}\PY{l+m}{20}\PY{p}{)}\PY{p}{,} \PY{n}{metric}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{silhouette\PYZsq{}}\PY{p}{)}
+\PY{n+nf}{visualizer.fit}\PY{p}{(}\PY{n}{data}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+C:\textbackslash{}Users\textbackslash{}CAJug\textbackslash{}anaconda3\textbackslash{}envs\textbackslash{}R\_py37\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}sklearn\textbackslash{}base.py:213:
+FutureWarning: From version 0.24, get\_params will raise an AttributeError if a
+parameter cannot be retrieved as an instance attribute. Previously it would
+return None.
+  FutureWarning)
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+KElbowVisualizer(ax=<AxesSubplot:>, k=None, metric='silhouette', model=None)
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_45_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{visualizer} \PY{o}{=} \PY{n+nf}{KElbowVisualizer}\PY{p}{(}\PY{n}{kmeans}\PY{p}{,} \PY{n}{k}\PY{o}{=}\PY{p}{(}\PY{l+m}{2}\PY{p}{,}\PY{l+m}{20}\PY{p}{)}\PY{p}{,}\PY{n}{metric}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{distortion\PYZsq{}}\PY{p}{)}
+\PY{n+nf}{visualizer.fit}\PY{p}{(}\PY{n}{data}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+C:\textbackslash{}Users\textbackslash{}CAJug\textbackslash{}anaconda3\textbackslash{}envs\textbackslash{}R\_py37\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}sklearn\textbackslash{}base.py:213:
+FutureWarning: From version 0.24, get\_params will raise an AttributeError if a
+parameter cannot be retrieved as an instance attribute. Previously it would
+return None.
+  FutureWarning)
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+KElbowVisualizer(ax=<AxesSubplot:>, k=None, model=None)
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_46_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    On this generation, the best k according to the silhouette score is k =
+10. For this k we notice a peak on the distortion score which then leads
+to a smoother slope. So there is a chance we are getting a good number
+of clusters for this distribution.
+
+    \hypertarget{bootstrapping}{%
+\subsubsection{Bootstrapping}\label{bootstrapping}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{def} \PY{n+nf}{bootstrapping}\PY{p}{(}\PY{n}{data}\PY{o}{=}\PY{n+nf}{np.random.rand}\PY{p}{(}\PY{l+m}{100}\PY{p}{,}\PY{l+m}{2}\PY{p}{)}\PY{p}{,} \PY{n}{iteration}\PY{o}{=}\PY{l+m}{10}\PY{p}{,} \PY{n}{k}\PY{o}{=}\PY{l+m}{5}\PY{p}{)}\PY{o}{:}
+    \PY{c+c1}{\PYZsh{} Variables to work with}
+    \PY{n}{size} \PY{o}{=} \PY{n}{data.shape}\PY{p}{[}\PY{l+m}{0}\PY{p}{]}
+    \PY{n}{data\PYZus{}df} \PY{o}{=} \PY{n+nf}{pd.DataFrame}\PY{p}{(}\PY{n}{data}\PY{p}{)}
+    \PY{n}{df} \PY{o}{=} \PY{n+nf}{pd.DataFrame}\PY{p}{(}\PY{p}{)}
+    \PY{n}{samples} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+    \PY{n}{inertia} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+    \PY{n}{silhouette} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+
+    \PY{n}{for} \PY{n}{j} \PY{n}{in} \PY{n+nf}{range}\PY{p}{(}\PY{n}{iteration}\PY{p}{)}\PY{o}{:}
+        \PY{c+c1}{\PYZsh{} Build samples}
+        \PY{n}{i} \PY{o}{=} \PY{l+m}{0}
+        \PY{n}{while} \PY{n}{i} \PY{o}{\PYZlt{}} \PY{n}{size} \PY{o}{:}
+            \PY{n}{df} \PY{o}{=} \PY{n+nf}{df.append}\PY{p}{(}\PY{n+nf}{data\PYZus{}df.sample}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+            \PY{n}{i}\PY{o}{+}\PY{o}{=}\PY{l+m}{1}
+        \PY{n+nf}{samples.append}\PY{p}{(}\PY{n}{df}\PY{p}{)}
+  
+    \PY{n}{for} \PY{n}{sample} \PY{n}{in} \PY{n}{samples}\PY{o}{:}
+        \PY{n}{km} \PY{o}{=} \PY{n+nf}{KMeans}\PY{p}{(}\PY{n}{n\PYZus{}clusters}\PY{o}{=}\PY{n}{k}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{l+m}{0}\PY{p}{)}\PY{n+nf}{.fit}\PY{p}{(}\PY{n}{sample}\PY{p}{)}
+        \PY{n+nf}{inertia.append}\PY{p}{(}\PY{n}{km.inertia\PYZus{}}\PY{p}{)}
+    
+        \PY{n+nf}{silhouette.append}\PY{p}{(}\PY{n+nf}{metrics.silhouette\PYZus{}score}\PY{p}{(}\PY{n}{sample}\PY{p}{,}\PY{n}{km.labels\PYZus{}}\PY{p}{)}\PY{p}{)}
+  
+    \PY{n+nf}{print}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Average Silhouette score =\PYZdq{}}\PY{p}{,} \PY{n+nf}{np.mean}\PY{p}{(}\PY{n}{silhouette}\PY{p}{)}\PY{p}{)}
+    \PY{n+nf}{print}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Average inertia =\PYZdq{}}\PY{p}{,}\PY{n+nf}{np.mean}\PY{p}{(}\PY{n}{inertia}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Iteration : numbers of sample generated and fit to the model, k : a given k}
+\PY{n+nf}{bootstrapping}\PY{p}{(}\PY{n}{data}\PY{p}{,}\PY{n}{iteration}\PY{o}{=}\PY{l+m}{20}\PY{p}{,}\PY{n}{k}\PY{o}{=}\PY{l+m}{6}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Average Silhouette score = 0.45809107224876505
+Average inertia = 24.182625389992833
+    \end{Verbatim}
+
+    Bootstrapping shows us our kmeans over dimensional coordinates works
+well since its mean value is almost at 0.5 in a {[}-1, 1{]} scope. The
+inertia is also high considering distances of individuals to their
+centers is below sqrt(2) in this dimensional space, meaning the clusters
+are coherent.
+
+    \hypertarget{r-part}{%
+\subsection{R Part}\label{r-part}}
+
+    The dataset : https://www.kaggle.com/carlolepelaars/toy-dataset
+
+Content :
+
+Note: All data is fictional. The data has been generated so that their
+distributions are convenient for statistical analysis.
+
+\begin{itemize}
+\tightlist
+\item
+  Number: A simple index number for each row
+\item
+  City: The location of a person (Dallas, New York City, Los Angeles,
+  Mountain View, Boston, Washington D.C., San Diego and Austin)
+\item
+  Gender: Gender of a person (Male or Female)
+\item
+  Age: The age of a person (Ranging from 25 to 65 years)
+\item
+  Income: Annual income of a person (Ranging from -674 to 177175)
+\item
+  Illness: Is the person Ill? (Yes or No)
+\end{itemize}
+
+    \hypertarget{dataset-analysis-and-preprocessing}{%
+\subsubsection{Dataset Analysis And
+preprocessing}\label{dataset-analysis-and-preprocessing}}
+
+    \hypertarget{imports}{%
+\paragraph{Imports}\label{imports}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{library}\PY{p}{(}\PY{n}{namespace}\PY{p}{)}
+\PY{n+nf}{registerNamespace}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{psy\PYZsq{}}\PY{p}{,} \PY{n+nf}{loadNamespace}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{psych\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\PY{n+nf}{library}\PY{p}{(}\PY{n}{ggplot2}\PY{p}{)}
+\PY{n+nf}{library}\PY{p}{(}\PY{n}{reshape2}\PY{p}{)}
+\PY{n+nf}{library}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{IRdisplay\PYZdq{}}\PY{p}{)}
+\PY{n+nf}{library}\PY{p}{(}\PY{n}{ade4}\PY{p}{)}
+\PY{n+nf}{library}\PY{p}{(}\PY{n}{factoextra}\PY{p}{)}
+\PY{n+nf}{library}\PY{p}{(}\PY{n}{NbClust}\PY{p}{)}
+\PY{n+nf}{library}\PY{p}{(}\PY{n}{bootcluster}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<environment: namespace:psych>
+    \end{Verbatim}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+Warning message:
+"package 'ggplot2' was built under R version 3.6.3"Warning message:
+"package 'factoextra' was built under R version 3.6.3"Welcome! Want to learn
+more? See two factoextra-related books at https://goo.gl/ve3WBa
+Warning message:
+"package 'bootcluster' was built under R version 3.6.3"Registered S3 method
+overwritten by 'GGally':
+  method from
+  +.gg   ggplot2
+Registered S3 method overwritten by 'sets':
+  method        from
+  print.element ggplot2
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{csv} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{read.csv}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{data/toy\PYZus{}dataset.csv\PYZdq{}}\PY{p}{,} \PY{n}{header} \PY{o}{=} \PY{k+kc}{TRUE}\PY{p}{)}
+\PY{n+nf}{head}\PY{p}{(}\PY{n}{csv}\PY{p}{[}\PY{p}{,}\PY{l+m}{2}\PY{o}{:}\PY{n+nf}{ncol}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tabular}{r|lllll}
+ City & Gender & Age & Income & Illness\\
+\hline
+	 Dallas & Male   & 41     & 40367  & No    \\
+	 Dallas & Male   & 54     & 45084  & No    \\
+	 Dallas & Male   & 42     & 52483  & No    \\
+	 Dallas & Male   & 40     & 40941  & No    \\
+	 Dallas & Male   & 46     & 50289  & No    \\
+	 Dallas & Female & 36     & 50786  & No    \\
+\end{tabular}
+
+
+    
+    \hypertarget{data-understanding---univariate-analysis}{%
+\paragraph{Data Understanding - Univariate
+Analysis}\label{data-understanding---univariate-analysis}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{as.data.frame}\PY{p}{(}\PY{n+nf}{table}\PY{p}{(}\PY{n}{csv}\PY{p}{[}\PY{p}{,}\PY{l+m}{2}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\PY{n}{df}\PY{p}{[}\PY{n+nf}{order}\PY{p}{(}\PY{n}{df}\PY{o}{\PYZdl{}}\PY{n}{Freq}\PY{p}{)}\PY{p}{,}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tabular}{r|ll}
+  & Var1 & Freq\\
+\hline
+	7 & San Diego       &  4881          \\
+	8 & Washington D.C. &  8120          \\
+	2 & Boston          &  8301          \\
+	1 & Austin          & 12292          \\
+	5 & Mountain View   & 14219          \\
+	3 & Dallas          & 19707          \\
+	4 & Los Angeles     & 32173          \\
+	6 & New York City   & 50307          \\
+\end{tabular}
+
+
+    
+    We can see that the cities are unequally proportionnate in this dataset,
+and this could lead to bias in our models.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{as.data.frame}\PY{p}{(}\PY{n+nf}{table}\PY{p}{(}\PY{n}{csv}\PY{p}{[}\PY{p}{,}\PY{l+m}{3}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\PY{n}{df}\PY{p}{[}\PY{n+nf}{order}\PY{p}{(}\PY{n}{df}\PY{o}{\PYZdl{}}\PY{n}{Freq}\PY{p}{)}\PY{p}{,}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tabular}{r|ll}
+ Var1 & Freq\\
+\hline
+	 Female & 66200 \\
+	 Male   & 83800 \\
+\end{tabular}
+
+
+    
+    Women are less present in this dataset than men, we should take it in
+account too
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{hist}\PY{p}{(}\PY{n}{csv}\PY{p}{[}\PY{p}{,}\PY{l+m}{4}\PY{p}{]}\PY{p}{,} \PY{n}{breaks}\PY{o}{=}\PY{n+nf}{pretty}\PY{p}{(}\PY{n}{csv}\PY{p}{[}\PY{p}{,}\PY{l+m}{4}\PY{p}{]}\PY{p}{,}\PY{l+m}{5}\PY{p}{)}\PY{p}{,} \PY{n}{col}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{red\PYZdq{}}\PY{p}{,} \PY{n}{xlab}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{Age categories\PYZdq{}}\PY{p}{,} \PY{n}{main}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{Distribution of ages\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_63_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Same conclusion as before, we can see that the ages follows a normal
+distribution, centered around 45 years old. Then, old (over 60 years
+old) and young (below 20 years old) people are less represented.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{hist}\PY{p}{(}\PY{n}{csv}\PY{p}{[}\PY{p}{,}\PY{l+m}{5}\PY{p}{]}\PY{p}{,} \PY{n}{breaks}\PY{o}{=}\PY{n+nf}{pretty}\PY{p}{(}\PY{n}{csv}\PY{p}{[}\PY{p}{,}\PY{l+m}{5}\PY{p}{]}\PY{p}{,}\PY{l+m}{1000}\PY{p}{)}\PY{p}{,} \PY{n}{col}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{red\PYZdq{}}\PY{p}{,} \PY{n}{xlab}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{Incomes Category\PYZdq{}}\PY{p}{,} \PY{n}{main}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{Distribution of incomes\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_65_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Here is a relatively more complex distribution with a high peak around
+95000 units per year, and with some less high peaks : fortunate people
+around 130000 units per year, and less fortunate people around 50000
+units per year.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{as.data.frame}\PY{p}{(}\PY{n+nf}{table}\PY{p}{(}\PY{n}{csv}\PY{p}{[}\PY{p}{,}\PY{l+m}{6}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\PY{n}{df}\PY{p}{[}\PY{n+nf}{order}\PY{p}{(}\PY{n}{df}\PY{o}{\PYZdl{}}\PY{n}{Freq}\PY{p}{)}\PY{p}{,}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tabular}{r|ll}
+  & Var1 & Freq\\
+\hline
+	2 & Yes    &  12139\\
+	1 & No     & 137861\\
+\end{tabular}
+
+
+    
+    Lastly, we can see that our dataset contains less than a 10\% ratio on
+Ill and Safe people.
+
+    \hypertarget{data-understanding---bivariate-analysis}{%
+\paragraph{Data Understanding - Bivariate
+Analysis}\label{data-understanding---bivariate-analysis}}
+
+    For the simplicity of this analysis, we will only try to evaluate the
+combination of each row with Illness.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{as.data.frame}\PY{p}{(}\PY{n+nf}{table}\PY{p}{(}\PY{n}{csv}\PY{p}{[}\PY{p}{,}\PY{n+nf}{c}\PY{p}{(}\PY{l+m}{2}\PY{p}{,}\PY{l+m}{6}\PY{p}{)}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\PY{n}{df}\PY{p}{[}\PY{n+nf}{order}\PY{p}{(}\PY{n}{df}\PY{o}{\PYZdl{}}\PY{n}{City}\PY{p}{)}\PY{p}{,}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tabular}{r|lll}
+  & City & Illness & Freq\\
+\hline
+	1 & Austin          & No              & 11281          \\
+	9 & Austin          & Yes             &  1011          \\
+	2 & Boston          & No              &  7615          \\
+	10 & Boston          & Yes             &   686          \\
+	3 & Dallas          & No              & 18094          \\
+	11 & Dallas          & Yes             &  1613          \\
+	4 & Los Angeles     & No              & 29605          \\
+	12 & Los Angeles     & Yes             &  2568          \\
+	5 & Mountain View   & No              & 13041          \\
+	13 & Mountain View   & Yes             &  1178          \\
+	6 & New York City   & No              & 46286          \\
+	14 & New York City   & Yes             &  4021          \\
+	7 & San Diego       & No              &  4487          \\
+	15 & San Diego       & Yes             &   394          \\
+	8 & Washington D.C. & No              &  7452          \\
+	16 & Washington D.C. & Yes             &   668          \\
+\end{tabular}
+
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{prop} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{p}{)}
+\PY{n}{rows} \PY{o}{=} \PY{n+nf}{nrow}\PY{p}{(}\PY{n}{df}\PY{p}{)}\PY{o}{/}\PY{l+m}{2}
+\PY{n+nf}{for}\PY{p}{(}\PY{n}{i} \PY{n}{in} \PY{l+m}{1}\PY{o}{:}\PY{n}{rows}\PY{p}{)}\PY{p}{\PYZob{}}
+    \PY{n}{prop} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{n}{prop}\PY{p}{,} \PY{n}{df}\PY{o}{\PYZdl{}}\PY{n}{Freq}\PY{p}{[}\PY{n}{i}\PY{o}{+}\PY{n}{rows}\PY{p}{]}\PY{o}{/}\PY{n}{df}\PY{o}{\PYZdl{}}\PY{n}{Freq}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}
+\PY{p}{\PYZcb{}}
+\PY{n}{prop} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{as.data.frame}\PY{p}{(}\PY{n+nf}{list}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{City\PYZdq{}}\PY{o}{=}\PY{n}{df}\PY{o}{\PYZdl{}}\PY{n}{City}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Proportion\PYZdq{}}\PY{o}{=}\PY{n}{prop}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{ggplot}\PY{p}{(}\PY{n}{data}\PY{o}{=}\PY{n}{prop}\PY{p}{,} \PY{n+nf}{aes}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{n}{City}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{n}{Proportion}\PY{p}{)}\PY{p}{)} \PY{o}{+}
+  \PY{n+nf}{geom\PYZus{}bar}\PY{p}{(}\PY{n}{stat}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{identity\PYZdq{}}\PY{p}{,} \PY{n}{fill}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{steelblue\PYZdq{}}\PY{p}{)} \PY{o}{+}
+  \PY{n+nf}{geom\PYZus{}text}\PY{p}{(}\PY{n+nf}{aes}\PY{p}{(}\PY{n}{label}\PY{o}{=}\PY{n+nf}{round}\PY{p}{(}\PY{n}{Proportion}\PY{p}{,}\PY{l+m}{4}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{vjust}\PY{o}{=}\PY{l+m}{1.6}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{white\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m}{3}\PY{p}{)} \PY{o}{+}
+  \PY{n+nf}{theme}\PY{p}{(}\PY{n}{axis.text.y}\PY{o}{=}\PY{n+nf}{element\PYZus{}blank}\PY{p}{(}\PY{p}{)}\PY{p}{,}
+        \PY{n}{axis.ticks.y}\PY{o}{=}\PY{n+nf}{element\PYZus{}blank}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_73_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    As we can see, each city as quite the same amount of ill person, it
+means that it is not a deterministic factor : there are no real
+correlation between those columns.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{as.data.frame}\PY{p}{(}\PY{n+nf}{table}\PY{p}{(}\PY{n}{csv}\PY{p}{[}\PY{p}{,}\PY{n+nf}{c}\PY{p}{(}\PY{l+m}{3}\PY{p}{,}\PY{l+m}{6}\PY{p}{)}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\PY{n}{df}\PY{p}{[}\PY{n+nf}{order}\PY{p}{(}\PY{n}{df}\PY{o}{\PYZdl{}}\PY{n}{Gender}\PY{p}{)}\PY{p}{,}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tabular}{r|lll}
+  & Gender & Illness & Freq\\
+\hline
+	1 & Female & No     & 60869 \\
+	3 & Female & Yes    &  5331 \\
+	2 & Male   & No     & 76992 \\
+	4 & Male   & Yes    &  6808 \\
+\end{tabular}
+
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{prop} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{p}{)}
+\PY{n}{rows} \PY{o}{=} \PY{n+nf}{nrow}\PY{p}{(}\PY{n}{df}\PY{p}{)}\PY{o}{/}\PY{l+m}{2}
+\PY{n+nf}{for}\PY{p}{(}\PY{n}{i} \PY{n}{in} \PY{l+m}{1}\PY{o}{:}\PY{n}{rows}\PY{p}{)}\PY{p}{\PYZob{}}
+    \PY{n}{prop} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{n}{prop}\PY{p}{,} \PY{n}{df}\PY{o}{\PYZdl{}}\PY{n}{Freq}\PY{p}{[}\PY{n}{i}\PY{o}{+}\PY{n}{rows}\PY{p}{]}\PY{o}{/}\PY{n}{df}\PY{o}{\PYZdl{}}\PY{n}{Freq}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}
+\PY{p}{\PYZcb{}}
+\PY{n}{prop} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{as.data.frame}\PY{p}{(}\PY{n+nf}{list}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Gender\PYZdq{}}\PY{o}{=}\PY{n}{df}\PY{o}{\PYZdl{}}\PY{n}{Gender}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Proportion\PYZdq{}}\PY{o}{=}\PY{n}{prop}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{ggplot}\PY{p}{(}\PY{n}{data}\PY{o}{=}\PY{n}{prop}\PY{p}{,} \PY{n+nf}{aes}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{n}{Gender}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{n}{Proportion}\PY{p}{)}\PY{p}{)} \PY{o}{+}
+  \PY{n+nf}{geom\PYZus{}bar}\PY{p}{(}\PY{n}{stat}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{identity\PYZdq{}}\PY{p}{,} \PY{n}{fill}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{steelblue\PYZdq{}}\PY{p}{)} \PY{o}{+}
+  \PY{n+nf}{geom\PYZus{}text}\PY{p}{(}\PY{n+nf}{aes}\PY{p}{(}\PY{n}{label}\PY{o}{=}\PY{n+nf}{round}\PY{p}{(}\PY{n}{Proportion}\PY{p}{,}\PY{l+m}{4}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{vjust}\PY{o}{=}\PY{l+m}{1.6}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{white\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m}{3}\PY{p}{)} \PY{o}{+}
+  \PY{n+nf}{theme}\PY{p}{(}\PY{n}{axis.text.y}\PY{o}{=}\PY{n+nf}{element\PYZus{}blank}\PY{p}{(}\PY{p}{)}\PY{p}{,}
+        \PY{n}{axis.ticks.y}\PY{o}{=}\PY{n+nf}{element\PYZus{}blank}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_77_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Same conclusion for the gender, both have the same ratio.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Let's now have a look at ages by creating categories.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{age\PYZus{}categories} \PY{o}{=} \PY{n+nf}{list}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Ages\PYZdq{}}\PY{o}{=}\PY{n+nf}{list}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Min\PYZdq{}}\PY{o}{=}\PY{n+nf}{c}\PY{p}{(}\PY{l+m}{20}\PY{p}{,}\PY{l+m}{30}\PY{p}{,}\PY{l+m}{40}\PY{p}{,}\PY{l+m}{50}\PY{p}{,}\PY{l+m}{60}\PY{p}{)}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Max\PYZdq{}}\PY{o}{=}\PY{n+nf}{c}\PY{p}{(}\PY{l+m}{29}\PY{p}{,}\PY{l+m}{39}\PY{p}{,}\PY{l+m}{49}\PY{p}{,}\PY{l+m}{59}\PY{p}{,}\PY{l+m}{150}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Ill\PYZdq{}}\PY{o}{=}\PY{n+nf}{c}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Safe\PYZdq{}}\PY{o}{=}\PY{n+nf}{c}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{n+nf}{for}\PY{p}{(}\PY{n}{i} \PY{n}{in} \PY{l+m}{1}\PY{o}{:}\PY{n+nf}{length}\PY{p}{(}\PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ages}\PY{o}{\PYZdl{}}\PY{n}{Min}\PY{p}{)}\PY{p}{)}\PY{p}{\PYZob{}}
+    \PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ill} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ill}\PY{p}{,}\PY{l+m}{0}\PY{p}{)}
+    \PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Safe} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Safe}\PY{p}{,}\PY{l+m}{0}\PY{p}{)}
+\PY{p}{\PYZcb{}}
+\PY{n+nf}{for}\PY{p}{(}\PY{n}{i} \PY{n}{in} \PY{l+m}{1}\PY{o}{:}\PY{n+nf}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{)}\PY{p}{\PYZob{}}
+    \PY{n+nf}{for}\PY{p}{(}\PY{n}{j} \PY{n}{in} \PY{l+m}{1}\PY{o}{:}\PY{n+nf}{length}\PY{p}{(}\PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ages}\PY{o}{\PYZdl{}}\PY{n}{Min}\PY{p}{)}\PY{p}{)}\PY{p}{\PYZob{}}
+        \PY{n+nf}{if}\PY{p}{(}\PY{n}{csv}\PY{o}{\PYZdl{}}\PY{n}{Age}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZlt{}=} \PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ages}\PY{o}{\PYZdl{}}\PY{n}{Max}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{\PYZam{}\PYZam{}} \PY{n}{csv}\PY{o}{\PYZdl{}}\PY{n}{Age}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZgt{}=} \PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ages}\PY{o}{\PYZdl{}}\PY{n}{Min}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{p}{)}\PY{p}{\PYZob{}}
+            \PY{n+nf}{if}\PY{p}{(}\PY{n}{csv}\PY{o}{\PYZdl{}}\PY{n}{Illness}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{==} \PY{l+s}{\PYZdq{}}\PY{l+s}{No\PYZdq{}}\PY{p}{)}\PY{p}{\PYZob{}}
+                \PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Safe}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Safe}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{+} \PY{l+m}{1}
+            \PY{p}{\PYZcb{}}\PY{n}{else}\PY{p}{\PYZob{}}
+                \PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ill}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ill}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{+} \PY{l+m}{1}
+            \PY{p}{\PYZcb{}}
+        \PY{p}{\PYZcb{}}
+    \PY{p}{\PYZcb{}}
+\PY{p}{\PYZcb{}}
+\PY{n}{prop} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{list}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Age\PYZdq{}}\PY{o}{=}\PY{n+nf}{c}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Proportion\PYZdq{}}\PY{o}{=}\PY{n+nf}{c}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{n+nf}{for}\PY{p}{(}\PY{n}{i} \PY{n}{in} \PY{l+m}{1}\PY{o}{:}\PY{n+nf}{length}\PY{p}{(}\PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ages}\PY{o}{\PYZdl{}}\PY{n}{Min}\PY{p}{)}\PY{p}{)}\PY{p}{\PYZob{}}
+    \PY{n}{prop}\PY{o}{\PYZdl{}}\PY{n}{Age} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{n}{prop}\PY{o}{\PYZdl{}}\PY{n}{Age}\PY{p}{,} \PY{n+nf}{paste0}\PY{p}{(}\PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ages}\PY{o}{\PYZdl{}}\PY{n}{Min}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,}\PY{l+s}{\PYZdq{}}\PY{l+s}{\PYZhy{}\PYZdq{}}\PY{p}{,}\PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ages}\PY{o}{\PYZdl{}}\PY{n}{Max}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+    \PY{n}{prop}\PY{o}{\PYZdl{}}\PY{n}{Proportion} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{n}{prop}\PY{o}{\PYZdl{}}\PY{n}{Proportion}\PY{p}{,} \PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ill}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{/}\PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Safe}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}
+\PY{p}{\PYZcb{}}
+\PY{n}{prop} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{as.data.frame}\PY{p}{(}\PY{n}{prop}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{prop}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tabular}{r|ll}
+ Age & Proportion\\
+\hline
+	 20-29      & 0.08796707\\
+	 30-39      & 0.08626458\\
+	 40-49      & 0.08928675\\
+	 50-59      & 0.08741544\\
+	 60-150     & 0.09028147\\
+\end{tabular}
+
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{ggplot}\PY{p}{(}\PY{n}{data}\PY{o}{=}\PY{n}{prop}\PY{p}{,} \PY{n+nf}{aes}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{n}{Age}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{n}{Proportion}\PY{p}{)}\PY{p}{)} \PY{o}{+}
+  \PY{n+nf}{geom\PYZus{}bar}\PY{p}{(}\PY{n}{stat}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{identity\PYZdq{}}\PY{p}{,} \PY{n}{fill}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{steelblue\PYZdq{}}\PY{p}{)} \PY{o}{+}
+  \PY{n+nf}{geom\PYZus{}text}\PY{p}{(}\PY{n+nf}{aes}\PY{p}{(}\PY{n}{label}\PY{o}{=}\PY{n+nf}{round}\PY{p}{(}\PY{n}{Proportion}\PY{p}{,}\PY{l+m}{4}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{vjust}\PY{o}{=}\PY{l+m}{1.6}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{white\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m}{3}\PY{p}{)} \PY{o}{+}
+  \PY{n+nf}{theme}\PY{p}{(}\PY{n}{axis.text.y}\PY{o}{=}\PY{n+nf}{element\PYZus{}blank}\PY{p}{(}\PY{p}{)}\PY{p}{,}
+        \PY{n}{axis.ticks.y}\PY{o}{=}\PY{n+nf}{element\PYZus{}blank}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_81_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    We can see that the ratio is quite the same for each category of age
+(which is a bit strange considering reality). It is probably due to the
+fact that those datas are not real and were uniformly generated.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{income\PYZus{}categories} \PY{o}{=} \PY{n+nf}{list}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Incomes\PYZdq{}}\PY{o}{=}\PY{n+nf}{list}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Min\PYZdq{}}\PY{o}{=}\PY{n+nf}{c}\PY{p}{(}\PY{l+m}{0}\PY{p}{,}\PY{l+m}{60001}\PY{p}{,}\PY{l+m}{125001}\PY{p}{)}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Max\PYZdq{}}\PY{o}{=}\PY{n+nf}{c}\PY{p}{(}\PY{l+m}{60000}\PY{p}{,}\PY{l+m}{125000}\PY{p}{,}\PY{l+m}{200000}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Ill\PYZdq{}}\PY{o}{=}\PY{n+nf}{c}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Safe\PYZdq{}}\PY{o}{=}\PY{n+nf}{c}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{n+nf}{for}\PY{p}{(}\PY{n}{i} \PY{n}{in} \PY{l+m}{1}\PY{o}{:}\PY{n+nf}{length}\PY{p}{(}\PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Incomes}\PY{o}{\PYZdl{}}\PY{n}{Min}\PY{p}{)}\PY{p}{)}\PY{p}{\PYZob{}}
+    \PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ill} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ill}\PY{p}{,}\PY{l+m}{0}\PY{p}{)}
+    \PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Safe} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Safe}\PY{p}{,}\PY{l+m}{0}\PY{p}{)}
+\PY{p}{\PYZcb{}}
+\PY{n+nf}{for}\PY{p}{(}\PY{n}{i} \PY{n}{in} \PY{l+m}{1}\PY{o}{:}\PY{n+nf}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{)}\PY{p}{\PYZob{}}
+    \PY{n+nf}{for}\PY{p}{(}\PY{n}{j} \PY{n}{in} \PY{l+m}{1}\PY{o}{:}\PY{n+nf}{length}\PY{p}{(}\PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Incomes}\PY{o}{\PYZdl{}}\PY{n}{Min}\PY{p}{)}\PY{p}{)}\PY{p}{\PYZob{}}
+        \PY{n+nf}{if}\PY{p}{(}\PY{n}{csv}\PY{o}{\PYZdl{}}\PY{n}{Income}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZlt{}=} \PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Incomes}\PY{o}{\PYZdl{}}\PY{n}{Max}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{\PYZam{}\PYZam{}} \PY{n}{csv}\PY{o}{\PYZdl{}}\PY{n}{Income}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZgt{}=} \PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Incomes}\PY{o}{\PYZdl{}}\PY{n}{Min}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{p}{)}\PY{p}{\PYZob{}}
+            \PY{n+nf}{if}\PY{p}{(}\PY{n}{csv}\PY{o}{\PYZdl{}}\PY{n}{Illness}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{==} \PY{l+s}{\PYZdq{}}\PY{l+s}{No\PYZdq{}}\PY{p}{)}\PY{p}{\PYZob{}}
+                \PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Safe}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Safe}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{+} \PY{l+m}{1}
+            \PY{p}{\PYZcb{}}\PY{n}{else}\PY{p}{\PYZob{}}
+                \PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ill}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ill}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{+} \PY{l+m}{1}
+            \PY{p}{\PYZcb{}}
+        \PY{p}{\PYZcb{}}
+    \PY{p}{\PYZcb{}}
+\PY{p}{\PYZcb{}}
+\PY{n}{prop} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{list}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Incomes\PYZdq{}}\PY{o}{=}\PY{n+nf}{c}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Proportion\PYZdq{}}\PY{o}{=}\PY{n+nf}{c}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{n+nf}{for}\PY{p}{(}\PY{n}{i} \PY{n}{in} \PY{l+m}{1}\PY{o}{:}\PY{n+nf}{length}\PY{p}{(}\PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Incomes}\PY{o}{\PYZdl{}}\PY{n}{Min}\PY{p}{)}\PY{p}{)}\PY{p}{\PYZob{}}
+    \PY{n}{prop}\PY{o}{\PYZdl{}}\PY{n}{Incomes} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{n}{prop}\PY{o}{\PYZdl{}}\PY{n}{Incomes}\PY{p}{,} \PY{n+nf}{paste0}\PY{p}{(}\PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Incomes}\PY{o}{\PYZdl{}}\PY{n}{Min}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,}\PY{l+s}{\PYZdq{}}\PY{l+s}{\PYZhy{}\PYZdq{}}\PY{p}{,}\PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Incomes}\PY{o}{\PYZdl{}}\PY{n}{Max}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+    \PY{n}{prop}\PY{o}{\PYZdl{}}\PY{n}{Proportion} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{n}{prop}\PY{o}{\PYZdl{}}\PY{n}{Proportion}\PY{p}{,} \PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ill}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{/}\PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Safe}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}
+\PY{p}{\PYZcb{}}
+\PY{n}{prop} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{as.data.frame}\PY{p}{(}\PY{n}{prop}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{prop}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tabular}{r|ll}
+ Incomes & Proportion\\
+\hline
+	 0-60000      & 0.08848909  \\
+	 60001-125000 & 0.08770788  \\
+	 125001-2e+05 & 0.09067758  \\
+\end{tabular}
+
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{ggplot}\PY{p}{(}\PY{n}{data}\PY{o}{=}\PY{n}{prop}\PY{p}{,} \PY{n+nf}{aes}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{n}{Incomes}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{n}{Proportion}\PY{p}{)}\PY{p}{)} \PY{o}{+}
+  \PY{n+nf}{geom\PYZus{}bar}\PY{p}{(}\PY{n}{stat}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{identity\PYZdq{}}\PY{p}{,} \PY{n}{fill}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{steelblue\PYZdq{}}\PY{p}{)} \PY{o}{+}
+  \PY{n+nf}{geom\PYZus{}text}\PY{p}{(}\PY{n+nf}{aes}\PY{p}{(}\PY{n}{label}\PY{o}{=}\PY{n+nf}{round}\PY{p}{(}\PY{n}{Proportion}\PY{p}{,}\PY{l+m}{4}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{vjust}\PY{o}{=}\PY{l+m}{1.6}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{white\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m}{3}\PY{p}{)} \PY{o}{+}
+  \PY{n+nf}{theme}\PY{p}{(}\PY{n}{axis.text.y}\PY{o}{=}\PY{n+nf}{element\PYZus{}blank}\PY{p}{(}\PY{p}{)}\PY{p}{,}
+        \PY{n}{axis.ticks.y}\PY{o}{=}\PY{n+nf}{element\PYZus{}blank}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_85_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Same conclusion as before, we can't say that any column in our dataset
+can be linearly correlated to Illness.
+
+    \hypertarget{preprocessing-data---extract-binary-categorical-variable}{%
+\paragraph{Preprocessing Data - Extract Binary Categorical
+Variable}\label{preprocessing-data---extract-binary-categorical-variable}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}g} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{as.data.frame}\PY{p}{(}\PY{n+nf}{table}\PY{p}{(}\PY{n}{csv}\PY{p}{[}\PY{p}{,}\PY{l+m}{3}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\PY{n}{df\PYZus{}i} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{as.data.frame}\PY{p}{(}\PY{n+nf}{table}\PY{p}{(}\PY{n}{csv}\PY{p}{[}\PY{p}{,}\PY{l+m}{6}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\PY{n}{rows} \PY{o}{=} \PY{n+nf}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}
+\PY{n}{gender} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{integer}\PY{p}{(}\PY{n}{rows}\PY{p}{)}
+\PY{n}{illness} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{integer}\PY{p}{(}\PY{n}{rows}\PY{p}{)}
+\PY{n+nf}{for}\PY{p}{(}\PY{n}{i} \PY{n}{in} \PY{l+m}{1}\PY{o}{:}\PY{n}{rows}\PY{p}{)}\PY{p}{\PYZob{}}
+    \PY{n+nf}{for}\PY{p}{(}\PY{n}{j} \PY{n}{in} \PY{l+m}{1}\PY{o}{:}\PY{n+nf}{nrow}\PY{p}{(}\PY{n}{df\PYZus{}g}\PY{p}{)}\PY{p}{)}\PY{p}{\PYZob{}}
+        \PY{n+nf}{if}\PY{p}{(}\PY{n}{csv}\PY{o}{\PYZdl{}}\PY{n}{Gender}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{==} \PY{n}{df\PYZus{}g}\PY{o}{\PYZdl{}}\PY{n}{Var1}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{p}{)}\PY{p}{\PYZob{}}
+            \PY{n}{gender}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n}{j}\PY{l+m}{\PYZhy{}1}
+            \PY{n}{break}
+        \PY{p}{\PYZcb{}}
+    \PY{p}{\PYZcb{}}
+    \PY{n+nf}{for}\PY{p}{(}\PY{n}{j} \PY{n}{in} \PY{l+m}{1}\PY{o}{:}\PY{n+nf}{nrow}\PY{p}{(}\PY{n}{df\PYZus{}i}\PY{p}{)}\PY{p}{)}\PY{p}{\PYZob{}}
+        \PY{n+nf}{if}\PY{p}{(}\PY{n}{csv}\PY{o}{\PYZdl{}}\PY{n}{Illness}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{==} \PY{n}{df\PYZus{}i}\PY{o}{\PYZdl{}}\PY{n}{Var1}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{p}{)}\PY{p}{\PYZob{}}
+            \PY{n}{illness}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n}{j}\PY{l+m}{\PYZhy{}1}
+            \PY{n}{break}
+        \PY{p}{\PYZcb{}}
+    \PY{p}{\PYZcb{}}
+\PY{p}{\PYZcb{}}
+\PY{n}{gender\PYZus{}label} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n}{df\PYZus{}g}\PY{o}{\PYZdl{}}\PY{n}{Var1}
+\PY{n}{illness\PYZus{}label} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n}{df\PYZus{}i}\PY{o}{\PYZdl{}}\PY{n}{Var1}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{preprocessing-data---extract-multi-categorical-variable-ordinals}{%
+\paragraph{Preprocessing Data - Extract Multi Categorical Variable
+(ordinals)}\label{preprocessing-data---extract-multi-categorical-variable-ordinals}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{age\PYZus{}categories} \PY{o}{=} \PY{n+nf}{list}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Ages\PYZdq{}}\PY{o}{=}\PY{n+nf}{list}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Min\PYZdq{}}\PY{o}{=}\PY{n+nf}{c}\PY{p}{(}\PY{l+m}{20}\PY{p}{,}\PY{l+m}{30}\PY{p}{,}\PY{l+m}{40}\PY{p}{,}\PY{l+m}{50}\PY{p}{,}\PY{l+m}{60}\PY{p}{)}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Max\PYZdq{}}\PY{o}{=}\PY{n+nf}{c}\PY{p}{(}\PY{l+m}{29}\PY{p}{,}\PY{l+m}{39}\PY{p}{,}\PY{l+m}{49}\PY{p}{,}\PY{l+m}{59}\PY{p}{,}\PY{l+m}{150}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n}{age} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{integer}\PY{p}{(}\PY{n}{rows}\PY{p}{)}
+\PY{n+nf}{for}\PY{p}{(}\PY{n}{i} \PY{n}{in} \PY{l+m}{1}\PY{o}{:}\PY{n+nf}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{)}\PY{p}{\PYZob{}}
+    \PY{n+nf}{for}\PY{p}{(}\PY{n}{j} \PY{n}{in} \PY{l+m}{1}\PY{o}{:}\PY{n+nf}{length}\PY{p}{(}\PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ages}\PY{o}{\PYZdl{}}\PY{n}{Min}\PY{p}{)}\PY{p}{)}\PY{p}{\PYZob{}}
+        \PY{n+nf}{if}\PY{p}{(}\PY{n}{csv}\PY{o}{\PYZdl{}}\PY{n}{Age}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZlt{}=} \PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ages}\PY{o}{\PYZdl{}}\PY{n}{Max}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{\PYZam{}\PYZam{}} \PY{n}{csv}\PY{o}{\PYZdl{}}\PY{n}{Age}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZgt{}=} \PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ages}\PY{o}{\PYZdl{}}\PY{n}{Min}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{p}{)}\PY{p}{\PYZob{}}
+            \PY{n}{age}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n}{j}\PY{l+m}{\PYZhy{}1}
+            \PY{n}{break}
+        \PY{p}{\PYZcb{}}
+    \PY{p}{\PYZcb{}}
+\PY{p}{\PYZcb{}}
+\PY{n}{age\PYZus{}label} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{p}{)}
+\PY{n+nf}{for}\PY{p}{(}\PY{n}{i} \PY{n}{in} \PY{l+m}{1}\PY{o}{:}\PY{n+nf}{length}\PY{p}{(}\PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ages}\PY{o}{\PYZdl{}}\PY{n}{Min}\PY{p}{)}\PY{p}{)}\PY{p}{\PYZob{}}
+    \PY{n}{age\PYZus{}label} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{n}{age\PYZus{}label}\PY{p}{,} \PY{n+nf}{paste0}\PY{p}{(}\PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ages}\PY{o}{\PYZdl{}}\PY{n}{Min}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,}\PY{l+s}{\PYZdq{}}\PY{l+s}{\PYZhy{}\PYZdq{}}\PY{p}{,}\PY{n}{age\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Ages}\PY{o}{\PYZdl{}}\PY{n}{Max}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\PY{p}{\PYZcb{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{income\PYZus{}categories} \PY{o}{=} \PY{n+nf}{list}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Incomes\PYZdq{}}\PY{o}{=}\PY{n+nf}{list}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Min\PYZdq{}}\PY{o}{=}\PY{n+nf}{c}\PY{p}{(}\PY{l+m}{0}\PY{p}{,}\PY{l+m}{60001}\PY{p}{,}\PY{l+m}{125001}\PY{p}{)}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Max\PYZdq{}}\PY{o}{=}\PY{n+nf}{c}\PY{p}{(}\PY{l+m}{60000}\PY{p}{,}\PY{l+m}{125000}\PY{p}{,}\PY{l+m}{200000}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n}{income} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{integer}\PY{p}{(}\PY{n}{rows}\PY{p}{)}
+\PY{n+nf}{for}\PY{p}{(}\PY{n}{i} \PY{n}{in} \PY{l+m}{1}\PY{o}{:}\PY{n+nf}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{)}\PY{p}{\PYZob{}}
+    \PY{n+nf}{for}\PY{p}{(}\PY{n}{j} \PY{n}{in} \PY{l+m}{1}\PY{o}{:}\PY{n+nf}{length}\PY{p}{(}\PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Incomes}\PY{o}{\PYZdl{}}\PY{n}{Min}\PY{p}{)}\PY{p}{)}\PY{p}{\PYZob{}}
+        \PY{n+nf}{if}\PY{p}{(}\PY{n}{csv}\PY{o}{\PYZdl{}}\PY{n}{Income}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZlt{}=} \PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Incomes}\PY{o}{\PYZdl{}}\PY{n}{Max}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{\PYZam{}\PYZam{}} \PY{n}{csv}\PY{o}{\PYZdl{}}\PY{n}{Income}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZgt{}=} \PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Incomes}\PY{o}{\PYZdl{}}\PY{n}{Min}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{p}{)}\PY{p}{\PYZob{}}
+            \PY{n}{income}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n}{j}\PY{l+m}{\PYZhy{}1}
+            \PY{n}{break}
+        \PY{p}{\PYZcb{}}
+    \PY{p}{\PYZcb{}}
+\PY{p}{\PYZcb{}}
+\PY{n}{income\PYZus{}label} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{p}{)}
+\PY{n+nf}{for}\PY{p}{(}\PY{n}{i} \PY{n}{in} \PY{l+m}{1}\PY{o}{:}\PY{n+nf}{length}\PY{p}{(}\PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Incomes}\PY{o}{\PYZdl{}}\PY{n}{Min}\PY{p}{)}\PY{p}{)}\PY{p}{\PYZob{}}
+    \PY{n}{income\PYZus{}label} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{c}\PY{p}{(}\PY{n}{income\PYZus{}label}\PY{p}{,} \PY{n+nf}{paste0}\PY{p}{(}\PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Incomes}\PY{o}{\PYZdl{}}\PY{n}{Min}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,}\PY{l+s}{\PYZdq{}}\PY{l+s}{\PYZhy{}\PYZdq{}}\PY{p}{,}\PY{n}{income\PYZus{}categories}\PY{o}{\PYZdl{}}\PY{n}{Incomes}\PY{o}{\PYZdl{}}\PY{n}{Max}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\PY{p}{\PYZcb{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{preprocessing-data---extract-multi-categorical-variable-non-ordinal}{%
+\paragraph{Preprocessing Data - Extract Multi Categorical Variable
+(non-ordinal)}\label{preprocessing-data---extract-multi-categorical-variable-non-ordinal}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}c} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{as.data.frame}\PY{p}{(}\PY{n+nf}{table}\PY{p}{(}\PY{n}{csv}\PY{p}{[}\PY{p}{,}\PY{l+m}{2}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\PY{n}{city} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{matrix}\PY{p}{(}\PY{l+m}{0}\PY{p}{,} \PY{n}{nrow} \PY{o}{=} \PY{n+nf}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{,} \PY{n}{ncol} \PY{o}{=} \PY{n+nf}{nrow}\PY{p}{(}\PY{n}{df\PYZus{}c}\PY{p}{)}\PY{p}{)}
+\PY{n+nf}{for}\PY{p}{(}\PY{n}{i} \PY{n}{in} \PY{l+m}{1}\PY{o}{:}\PY{n+nf}{nrow}\PY{p}{(}\PY{n}{csv}\PY{p}{)}\PY{p}{)}\PY{p}{\PYZob{}}
+    \PY{n+nf}{for}\PY{p}{(}\PY{n}{j} \PY{n}{in} \PY{l+m}{1}\PY{o}{:}\PY{n+nf}{nrow}\PY{p}{(}\PY{n}{df\PYZus{}c}\PY{p}{)}\PY{p}{)}\PY{p}{\PYZob{}}
+        \PY{n+nf}{if}\PY{p}{(}\PY{n}{csv}\PY{o}{\PYZdl{}}\PY{n}{City}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{==} \PY{n}{df\PYZus{}c}\PY{o}{\PYZdl{}}\PY{n}{Var1}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{p}{)}\PY{p}{\PYZob{}}
+            \PY{n}{city}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{n}{j}\PY{p}{]} \PY{o}{\PYZlt{}\PYZhy{}} \PY{l+m}{1}
+            \PY{n}{break}
+        \PY{p}{\PYZcb{}}
+    \PY{p}{\PYZcb{}}
+\PY{p}{\PYZcb{}}
+\PY{n}{city\PYZus{}label} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n}{df\PYZus{}c}\PY{o}{\PYZdl{}}\PY{n}{Var1}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{create-processed-dataframe}{%
+\paragraph{Create processed
+DataFrame}\label{create-processed-dataframe}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{39}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{labels} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{list}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{City\PYZdq{}}\PY{o}{=}\PY{n}{city\PYZus{}label}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Gender\PYZdq{}}\PY{o}{=}\PY{n}{gender\PYZus{}label}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Age\PYZdq{}}\PY{o}{=}\PY{n}{age\PYZus{}label}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Income\PYZdq{}}\PY{o}{=}\PY{n}{income\PYZus{}label}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Illness\PYZdq{}}\PY{o}{=}\PY{n}{illness\PYZus{}label}\PY{p}{)}
+\PY{n}{df} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{as.data.frame}\PY{p}{(}\PY{n+nf}{list}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{City\PYZdq{}}\PY{o}{=}\PY{n}{city}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Gender\PYZdq{}}\PY{o}{=}\PY{n}{gender}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Age\PYZdq{}}\PY{o}{=}\PY{n}{age}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Income\PYZdq{}}\PY{o}{=}\PY{n}{income}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Illness\PYZdq{}}\PY{o}{=}\PY{n}{illness}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{40}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+m}{1}\PY{o}{:}\PY{l+m}{6}\PY{p}{,}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tabular}{r|llllllllllll}
+ City.1 & City.2 & City.3 & City.4 & City.5 & City.6 & City.7 & City.8 & Gender & Age & Income & Illness\\
+\hline
+	 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 1 & 2 & 0 & 0\\
+	 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 1 & 3 & 0 & 0\\
+	 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 1 & 2 & 0 & 0\\
+	 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 1 & 2 & 0 & 0\\
+	 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 1 & 2 & 0 & 0\\
+	 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
+\end{tabular}
+
+
+    
+    lastly, we will reduce the size (cause of memory usage)
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{41}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{print}\PY{p}{(}\PY{n+nf}{paste0}\PY{p}{(}\PY{n+nf}{nrow}\PY{p}{(}\PY{n}{df}\PY{p}{)}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{*\PYZdq{}}\PY{p}{,} \PY{n+nf}{ncol}\PY{p}{(}\PY{n}{df}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n}{df} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n}{df}\PY{p}{[}\PY{n+nf}{sample}\PY{p}{(}\PY{n+nf}{nrow}\PY{p}{(}\PY{n}{df}\PY{p}{)}\PY{p}{,} \PY{l+m}{3000}\PY{p}{)}\PY{p}{,} \PY{p}{]}
+\PY{n+nf}{print}\PY{p}{(}\PY{n+nf}{paste0}\PY{p}{(}\PY{n+nf}{nrow}\PY{p}{(}\PY{n}{df}\PY{p}{)}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{*\PYZdq{}}\PY{p}{,} \PY{n+nf}{ncol}\PY{p}{(}\PY{n}{df}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+[1] "150000*12"
+[1] "3000*12"
+    \end{Verbatim}
+
+    \hypertarget{clustering-and-validation}{%
+\subsubsection{Clustering And
+Validation}\label{clustering-and-validation}}
+
+    \hypertarget{principal-component-analysis}{%
+\paragraph{Principal Component
+Analysis}\label{principal-component-analysis}}
+
+    We will not speak a lot of PCA since it's not the subject, but here, we
+will use it to reduce the dimension space to two axis.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{42}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{pca\PYZus{}df} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{dudi.pca}\PY{p}{(}\PY{n}{df}\PY{p}{,} \PY{n}{center}\PY{o}{=}\PY{k+kc}{TRUE}\PY{p}{,} \PY{n}{scale}\PY{o}{=}\PY{k+kc}{TRUE}\PY{p}{,} \PY{n}{scannf} \PY{o}{=} \PY{k+kc}{FALSE}\PY{p}{,} \PY{n}{nf} \PY{o}{=} \PY{l+m}{2}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{43}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{screeplot}\PY{p}{(}\PY{n}{pca\PYZus{}df}\PY{p}{,} \PY{n}{main} \PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{Screeplot \PYZhy{} Eigenvalues\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_103_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    We clearly see that the dataset was generated since the inertia is quite
+constant over all the initial dimensions (excepting the last one),
+meaning that PCA is not as usefull as we can think. But we will still
+rely on the two first axis for this report.
+
+No matter what, using the elbow method we see that two axis are still a
+good choice even if they only represent a small percentage of
+information from the inital dataset.
+
+    \hypertarget{kmeans---centroid-based-clustering}{%
+\paragraph{Kmeans - Centroid-based
+Clustering}\label{kmeans---centroid-based-clustering}}
+
+    We will firstly select the best number of clusters using the Dun Index
+and the elbow method.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{44}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{fviz\PYZus{}nbclust}\PY{p}{(}\PY{n}{pca\PYZus{}df}\PY{o}{\PYZdl{}}\PY{n}{li}\PY{p}{,} \PY{n}{kmeans}\PY{p}{,} \PY{n}{method} \PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{wss\PYZdq{}}\PY{p}{)} \PY{o}{+} \PY{n+nf}{geom\PYZus{}vline}\PY{p}{(}\PY{n}{xintercept} \PY{o}{=} \PY{l+m}{4}\PY{p}{,} \PY{n}{linetype} \PY{o}{=} \PY{l+m}{2}\PY{p}{)} \PY{o}{+} 
+\PY{n+nf}{labs}\PY{p}{(}\PY{n}{subtitle} \PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{Elbow method\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_107_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{45}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{k\PYZus{}means} \PY{o}{=} \PY{n+nf}{kmeans}\PY{p}{(}\PY{n}{pca\PYZus{}df}\PY{o}{\PYZdl{}}\PY{n}{li}\PY{p}{,}\PY{n}{centers}\PY{o}{=}\PY{l+m}{4}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{46}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{fviz\PYZus{}cluster}\PY{p}{(}\PY{n}{k\PYZus{}means}\PY{p}{,} \PY{n}{df}\PY{p}{,} \PY{n}{ellipse.type} \PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{norm\PYZdq{}}\PY{p}{,} \PY{n}{geom}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{point\PYZdq{}}\PY{p}{)} \PY{o}{+} \PY{n+nf}{labs}\PY{p}{(}\PY{n}{title}\PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{K\PYZhy{}means with 4 clusters\PYZdq{}}\PY{p}{)} \PY{o}{+} 
+\PY{n+nf}{xlab}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{PCA\PYZhy{}1\PYZdq{}}\PY{p}{)} \PY{o}{+} \PY{n+nf}{ylab}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{PCA\PYZhy{}2\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_109_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{47}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{qplot}\PY{p}{(}\PY{n}{pca\PYZus{}df}\PY{o}{\PYZdl{}}\PY{n}{li}\PY{p}{[}\PY{p}{,}\PY{l+m}{1}\PY{p}{]}\PY{p}{,} \PY{n}{pca\PYZus{}df}\PY{o}{\PYZdl{}}\PY{n}{li}\PY{p}{[}\PY{p}{,}\PY{l+m}{2}\PY{p}{]}\PY{p}{,} \PY{n}{colour} \PY{o}{=} \PY{n}{df}\PY{o}{\PYZdl{}}\PY{n}{Income}\PY{p}{)} \PY{o}{+} 
+\PY{n+nf}{labs}\PY{p}{(}\PY{n}{title}\PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{PCA Projection regarding Income\PYZdq{}}\PY{p}{,} \PY{n}{color} \PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{Inc. Cat.\PYZdq{}}\PY{p}{)} \PY{o}{+} 
+\PY{n+nf}{xlab}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{PCA\PYZhy{}1\PYZdq{}}\PY{p}{)} \PY{o}{+} \PY{n+nf}{ylab}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{PCA\PYZhy{}2\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_110_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Here we clearly see that the PCA choose the categorical variable income
+as a major factor of information. Thus, we can see that the clustering
+seems to also take it in account in some ways.
+
+But this is not the only thing.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{48}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{qplot}\PY{p}{(}\PY{n}{pca\PYZus{}df}\PY{o}{\PYZdl{}}\PY{n}{li}\PY{p}{[}\PY{p}{,}\PY{l+m}{1}\PY{p}{]}\PY{p}{,} \PY{n}{pca\PYZus{}df}\PY{o}{\PYZdl{}}\PY{n}{li}\PY{p}{[}\PY{p}{,}\PY{l+m}{2}\PY{p}{]}\PY{p}{,} \PY{n}{colour} \PY{o}{=} \PY{n}{df}\PY{o}{\PYZdl{}}\PY{n}{City.6}\PY{p}{)} \PY{o}{+} 
+\PY{n+nf}{labs}\PY{p}{(}\PY{n}{title}\PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{PCA Projection regarding City.6\PYZdq{}}\PY{p}{,} \PY{n}{color} \PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{City.6\PYZdq{}}\PY{p}{)} \PY{o}{+} 
+\PY{n+nf}{xlab}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{PCA\PYZhy{}1\PYZdq{}}\PY{p}{)} \PY{o}{+} \PY{n+nf}{ylab}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{PCA\PYZhy{}2\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_112_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{49}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{qplot}\PY{p}{(}\PY{n}{pca\PYZus{}df}\PY{o}{\PYZdl{}}\PY{n}{li}\PY{p}{[}\PY{p}{,}\PY{l+m}{1}\PY{p}{]}\PY{p}{,} \PY{n}{pca\PYZus{}df}\PY{o}{\PYZdl{}}\PY{n}{li}\PY{p}{[}\PY{p}{,}\PY{l+m}{2}\PY{p}{]}\PY{p}{,} \PY{n}{colour} \PY{o}{=} \PY{n}{df}\PY{o}{\PYZdl{}}\PY{n}{City.5}\PY{p}{)} \PY{o}{+} 
+\PY{n+nf}{labs}\PY{p}{(}\PY{n}{title}\PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{PCA Projection regarding City.5\PYZdq{}}\PY{p}{,} \PY{n}{color} \PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{City.5\PYZdq{}}\PY{p}{)} \PY{o}{+} 
+\PY{n+nf}{xlab}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{PCA\PYZhy{}1\PYZdq{}}\PY{p}{)} \PY{o}{+} \PY{n+nf}{ylab}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{PCA\PYZhy{}2\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_113_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Here we see that Cities introduce a huge bias in our PCA. The other
+variables are all well distributed in the clusters. So we will try to
+delete cities from our pca.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Note that something is still interesting :
+
+\begin{itemize}
+\tightlist
+\item
+  As we can see in the city.6, the richer people seems to be
+  concentrated, and the clustering seems to have understand this.
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{50}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n}{df}\PY{p}{[}\PY{p}{,}\PY{p}{(}\PY{n+nf}{ncol}\PY{p}{(}\PY{n}{df}\PY{p}{)}\PY{l+m}{\PYZhy{}3}\PY{p}{)}\PY{o}{:}\PY{n+nf}{ncol}\PY{p}{(}\PY{n}{df}\PY{p}{)}\PY{p}{]}
+\PY{n+nf}{head}\PY{p}{(}\PY{n}{df}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tabular}{r|llll}
+  & Gender & Age & Income & Illness\\
+\hline
+	134058 & 0 & 2 & 1 & 0\\
+	124022 & 0 & 2 & 1 & 0\\
+	103065 & 0 & 4 & 2 & 1\\
+	124507 & 1 & 3 & 1 & 0\\
+	45404 & 0 & 2 & 1 & 0\\
+	65161 & 0 & 2 & 1 & 0\\
+\end{tabular}
+
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{51}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{pca\PYZus{}df} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n+nf}{dudi.pca}\PY{p}{(}\PY{n}{df}\PY{p}{,} \PY{n}{center}\PY{o}{=}\PY{k+kc}{TRUE}\PY{p}{,} \PY{n}{scale}\PY{o}{=}\PY{k+kc}{TRUE}\PY{p}{,} \PY{n}{scannf} \PY{o}{=} \PY{k+kc}{FALSE}\PY{p}{,} \PY{n}{nf} \PY{o}{=} \PY{l+m}{2}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{52}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{fviz\PYZus{}nbclust}\PY{p}{(}\PY{n}{pca\PYZus{}df}\PY{o}{\PYZdl{}}\PY{n}{li}\PY{p}{,} \PY{n}{kmeans}\PY{p}{,} \PY{n}{method} \PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{wss\PYZdq{}}\PY{p}{)} \PY{o}{+} \PY{n+nf}{geom\PYZus{}vline}\PY{p}{(}\PY{n}{xintercept} \PY{o}{=} \PY{l+m}{5}\PY{p}{,} \PY{n}{linetype} \PY{o}{=} \PY{l+m}{2}\PY{p}{)}
+\PY{o}{+} \PY{n+nf}{labs}\PY{p}{(}\PY{n}{subtitle} \PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{Elbow method\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}, frame=single, framerule=2mm, rulecolor=\color{outerrorbackground}]
+Error in +labs(subtitle = "Elbow method"): argument incorrect pour un opérateur unitaire
+Traceback:
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_117_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{53}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{k\PYZus{}means} \PY{o}{=} \PY{n+nf}{kmeans}\PY{p}{(}\PY{n}{pca\PYZus{}df}\PY{o}{\PYZdl{}}\PY{n}{li}\PY{p}{,}\PY{n}{centers}\PY{o}{=}\PY{l+m}{5}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{54}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{fviz\PYZus{}cluster}\PY{p}{(}\PY{n}{k\PYZus{}means}\PY{p}{,} \PY{n}{df}\PY{p}{,} \PY{n}{ellipse.type} \PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{norm\PYZdq{}}\PY{p}{,} \PY{n}{geom}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{point\PYZdq{}}\PY{p}{)} \PY{o}{+} \PY{n+nf}{labs}\PY{p}{(}\PY{n}{title}\PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{K\PYZhy{}means with 5 clusters\PYZdq{}}\PY{p}{)} \PY{o}{+} 
+\PY{n+nf}{xlab}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{PCA\PYZhy{}1\PYZdq{}}\PY{p}{)} \PY{o}{+} \PY{n+nf}{ylab}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{PCA\PYZhy{}2\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_119_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{55}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{qplot}\PY{p}{(}\PY{n}{pca\PYZus{}df}\PY{o}{\PYZdl{}}\PY{n}{li}\PY{p}{[}\PY{p}{,}\PY{l+m}{1}\PY{p}{]}\PY{p}{,} \PY{n}{pca\PYZus{}df}\PY{o}{\PYZdl{}}\PY{n}{li}\PY{p}{[}\PY{p}{,}\PY{l+m}{2}\PY{p}{]}\PY{p}{,} \PY{n}{colour} \PY{o}{=} \PY{n}{df}\PY{o}{\PYZdl{}}\PY{n}{Illness}\PY{p}{)} \PY{o}{+} 
+\PY{n+nf}{labs}\PY{p}{(}\PY{n}{title}\PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{PCA Projection regarding Illness\PYZdq{}}\PY{p}{,} \PY{n}{color} \PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{Illness\PYZdq{}}\PY{p}{)} \PY{o}{+} 
+\PY{n+nf}{xlab}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{PCA\PYZhy{}1\PYZdq{}}\PY{p}{)} \PY{o}{+} \PY{n+nf}{ylab}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{PCA\PYZhy{}2\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_120_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{56}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{qplot}\PY{p}{(}\PY{n}{pca\PYZus{}df}\PY{o}{\PYZdl{}}\PY{n}{li}\PY{p}{[}\PY{p}{,}\PY{l+m}{1}\PY{p}{]}\PY{p}{,} \PY{n}{pca\PYZus{}df}\PY{o}{\PYZdl{}}\PY{n}{li}\PY{p}{[}\PY{p}{,}\PY{l+m}{2}\PY{p}{]}\PY{p}{,} \PY{n}{colour} \PY{o}{=} \PY{n}{df}\PY{o}{\PYZdl{}}\PY{n}{Income}\PY{p}{)} \PY{o}{+} 
+\PY{n+nf}{labs}\PY{p}{(}\PY{n}{title}\PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{PCA Projection regarding Income\PYZdq{}}\PY{p}{,} \PY{n}{color} \PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{Inc. Cat.\PYZdq{}}\PY{p}{)} \PY{o}{+} 
+\PY{n+nf}{xlab}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{PCA\PYZhy{}1\PYZdq{}}\PY{p}{)} \PY{o}{+} \PY{n+nf}{ylab}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{PCA\PYZhy{}2\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_121_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{57}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{qplot}\PY{p}{(}\PY{n}{pca\PYZus{}df}\PY{o}{\PYZdl{}}\PY{n}{li}\PY{p}{[}\PY{p}{,}\PY{l+m}{1}\PY{p}{]}\PY{p}{,} \PY{n}{pca\PYZus{}df}\PY{o}{\PYZdl{}}\PY{n}{li}\PY{p}{[}\PY{p}{,}\PY{l+m}{2}\PY{p}{]}\PY{p}{,} \PY{n}{colour} \PY{o}{=} \PY{n}{df}\PY{o}{\PYZdl{}}\PY{n}{Gender}\PY{p}{)} \PY{o}{+} 
+\PY{n+nf}{labs}\PY{p}{(}\PY{n}{title}\PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{PCA Projection regarding Gender\PYZdq{}}\PY{p}{,} \PY{n}{color} \PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{Gender\PYZdq{}}\PY{p}{)} \PY{o}{+} 
+\PY{n+nf}{xlab}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{PCA\PYZhy{}1\PYZdq{}}\PY{p}{)} \PY{o}{+} \PY{n+nf}{ylab}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{PCA\PYZhy{}2\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_122_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{58}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{qplot}\PY{p}{(}\PY{n}{pca\PYZus{}df}\PY{o}{\PYZdl{}}\PY{n}{li}\PY{p}{[}\PY{p}{,}\PY{l+m}{1}\PY{p}{]}\PY{p}{,} \PY{n}{pca\PYZus{}df}\PY{o}{\PYZdl{}}\PY{n}{li}\PY{p}{[}\PY{p}{,}\PY{l+m}{2}\PY{p}{]}\PY{p}{,} \PY{n}{colour} \PY{o}{=} \PY{n}{df}\PY{o}{\PYZdl{}}\PY{n}{Age}\PY{p}{)} \PY{o}{+} 
+\PY{n+nf}{labs}\PY{p}{(}\PY{n}{title}\PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{PCA Projection regarding Age\PYZdq{}}\PY{p}{,} \PY{n}{color} \PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{Age\PYZdq{}}\PY{p}{)} \PY{o}{+} 
+\PY{n+nf}{xlab}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{PCA\PYZhy{}1\PYZdq{}}\PY{p}{)} \PY{o}{+} \PY{n+nf}{ylab}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{PCA\PYZhy{}2\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_123_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    In this case, the clustering is not really good. But it still better
+than before :
+
+\begin{itemize}
+\tightlist
+\item
+  We see that the PCA decided to create to distinct cluster based on
+  illness which in our case could be interessant.
+\item
+  Data are also clustered by the income category.
+\end{itemize}
+
+We could say those basics laws regarding to the result of clustering :
+
+\begin{itemize}
+\tightlist
+\item
+  Violet Cluster =\textgreater{} Non-ill
+\item
+  The other are ill, but with different criteria based on income, age or
+  gender
+\end{itemize}
+
+    \hypertarget{bootstraping-validation}{%
+\paragraph{Bootstraping Validation}\label{bootstraping-validation}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{59}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nf}{k.select}\PY{p}{(}\PY{n}{pca\PYZus{}df}\PY{o}{\PYZdl{}}\PY{n}{li}\PY{p}{,} \PY{l+m}{2}\PY{o}{:}\PY{l+m}{8}\PY{p}{,} \PY{n}{B} \PY{o}{=} \PY{l+m}{10}\PY{p}{,} \PY{n}{r} \PY{o}{=} \PY{l+m}{3}\PY{p}{,} \PY{n}{threshold} \PY{o}{=} \PY{l+m}{0.6}\PY{p}{,} \PY{n}{scheme\PYZus{}2} \PY{o}{=} \PY{k+kc}{TRUE}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{description}
+\item[\$profile] \begin{description*}
+\item[2] 0.801903234295317
+\item[3] 0.592810080143077
+\item[4] 0.422272936659293
+\item[5] 0.224290352705193
+\item[6] 0.234737062584996
+\item[7] 0.390443069880361
+\item[8] 0.25228254304847
+\end{description*}
+
+\item[\$k] 2
+\end{description}
+
+
+    
+    As we may have already find, the best k in with the pca is 2. Meaning
+that the best cluster would be Ill and Non-Ill.
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
