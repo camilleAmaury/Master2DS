@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<smile version="1.0" id="Sachs" numsamples="1000" discsamples="10000">
+	<nodes>
+		<cpt id="PKC">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<probabilities>0.4231481457685186 0.4816666651833334 0.09518518904814811</probabilities>
+		</cpt>
+		<cpt id="PKA">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<parents>PKC</parents>
+			<probabilities>0.3864332613566738 0.3794310620568938 0.2341356765864323 0.0603614 0.92272203 0.01691657 0.0155642 0.95914397 0.02529183</probabilities>
+		</cpt>
+		<cpt id="Raf">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<parents>PKA PKC</parents>
+			<probabilities>0.06228765937712341 0.1472253685277463 0.7904869720951303 0.3694267630573238 0.3312101668789834 0.2993630700636931 0.875 0.125 0 0.4475202 0.3125721 0.2399077 0.5508333 0.3929167 0.05625 0.8843813 0.1156187 0 0.8429906584299066 0.127102801271028 0.0299065402990654 0.75 0.15909091 0.09090909 0.8461538 0.1538462 0</probabilities>
+		</cpt>
+		<cpt id="Mek">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<parents>PKA PKC Raf</parents>
+			<probabilities>0.7454545 0.2545455 0 0.3846154 0.1230769 0.4923077 0.26217765 0.001432665 0.736389685 0.7068966 0.2931034 0 0.2692308 0.7307692 0 0.85106383 0.10638298 0.04255319 0.8571429 0.1428571 0 0 1 0 0.3333333333333334 0.3333333333333334 0.3333333333333334 0.757732 0.242268 0 0.3431734320000001 0.6494464940000001 0.007380074000000002 0.8653846113461539 0.1009615389903846 0.0336538496634615 0.714826 0.285174 0 0.274655355 0.720042418 0.005302227 0.2814815000000001 0.5851852000000001 0.1333333 0.8256881 0.1743119 0 0.1052632 0.8947368 0 0.3333333333333334 0.3333333333333334 0.3333333333333334 0.997782705 0.002217295 0 1 0 0 0.9375 0 0.0625 0.96969697 0.03030303 0 0.8571429 0.1428571 0 0.5 0.5 0 0.7272727 0.2727273 0 0 1 0 0.3333333333333334 0.3333333333333334 0.3333333333333334</probabilities>
+		</cpt>
+		<cpt id="Erk">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<parents>Mek PKA</parents>
+			<probabilities>0.8506666614933334 0.1386666686133333 0.0106666698933333 0.1177011117701112 0.6919540691954069 0.1903448190344819 0.07401033 0.70051635 0.22547332 0.3870967612903239 0.4838709516129048 0.1290322870967713 0.04893754 0.72826787 0.22279459 0 0.1 0.9 0.00862069 0.18793103 0.80344828 0 0.75 0.25 0 0 1</probabilities>
+		</cpt>
+		<cpt id="Akt">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<parents>Erk PKA</parents>
+			<probabilities>0.6722222 0.3277778 0 0.6204819 0.3795181 0 0.97674419 0.02325581 0 0.3349515 0.6650485 0 0.8214285714821429 0.1781954887178195 0.000375939800037594 0.94852941 0.05147059 0 0 0.1182573 0.8817427 0.1770833331770834 0.8138020838138022 0.009114583009114585 0.1702128 0.8297872 0</probabilities>
+		</cpt>
+		<cpt id="Jnk">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<parents>PKA PKC</parents>
+			<probabilities>0.2899207 0.2457531 0.4643262 0.5796178 0.4203822 0 0 1 0 0.5767013 0.4232987 0 0.6129167 0.3870833 0 0.04462474955375251 0.9350912706490874 0.0202839797971602 0.996261682 0.003738318 0 0.8636364 0.1363636 0 0.1538462 0.8461538 0</probabilities>
+		</cpt>
+		<cpt id="P38">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<parents>PKA PKC</parents>
+			<probabilities>0.30690827 0.06455266 0.62853907 0.6560510000000001 0.343949 0 0.875 0.125 0 0.919261822 0.078431373 0.002306805 0.815 0.185 0 0.803245436 0.192697769 0.004056795 0.8074766319252337 0.09158878908411212 0.1009345789906542 0.3863636 0.1590909 0.4545455 0.7692308 0.2307692 0</probabilities>
+		</cpt>
+		<cpt id="Plcg">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<probabilities>0.8122222281222223 0.08333333083333332 0.1044444410444444</probabilities>
+		</cpt>
+		<cpt id="PIP3">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<parents>Plcg</parents>
+			<probabilities>0.2184223 0.4473324 0.3342453 0.07777778000000001 0.21111111 0.7111111100000001 0.4237589 0.4397163 0.1365248</probabilities>
+		</cpt>
+		<cpt id="PIP2">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<parents>PIP3 Plcg</parents>
+			<probabilities>0.996868476 0.003131524 0 1 0 0 0.2217573221757322 0.493723849372385 0.2845188284518829 0.98674822 0.01325178 0 0.95789474 0.04210526 0 0.0766129 0.391129 0.5322581 0.8724420190000002 0.12005457 0.007503411000000002 0.521875 0.4625 0.015625 0.02597403 0.05194805 0.92207792</probabilities>
+		</cpt>
+	</nodes>
+	<extensions>
+		<genie version="1.0" app="GeNIe 2.0.5590.0" name="Sachs" faultnameformat="nodestate">
+			<node id="Akt">
+				<name>Akt</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>221 302 297 338</position>
+			</node>
+			<node id="Erk">
+				<name>Erk</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>120 282 196 318</position>
+			</node>
+			<node id="Jnk">
+				<name>Jnk</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>244 90 320 126</position>
+			</node>
+			<node id="Mek">
+				<name>Mek</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>50 242 126 278</position>
+			</node>
+			<node id="P38">
+				<name>P38</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>254 198 330 234</position>
+			</node>
+			<node id="PIP2">
+				<name>PIP2</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>359 158 435 194</position>
+			</node>
+			<node id="PIP3">
+				<name>PIP3</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>427 93 503 129</position>
+			</node>
+			<node id="PKA">
+				<name>PKA</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>141 117 217 153</position>
+			</node>
+			<node id="PKC">
+				<name>PKC</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>137 19 213 55</position>
+			</node>
+			<node id="Plcg">
+				<name>Plcg</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>357 22 433 58</position>
+			</node>
+			<node id="Raf">
+				<name>Raf</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>12 151 88 187</position>
+			</node>
+			<textbox>
+				<caption>K. Sachs, O. Perez, D. Pe&apos;er, D. A. Lauffenburger and G. P. Nolan. Causal Protein-Signaling Networks Derived from Multiparameter Single-Cell Data. Science, 308:523-529, 2005. </caption>
+				<font color="000000" name="Arial" size="8" />
+				<position>418 220 614 290</position>
+			</textbox>
+		</genie>
+	</extensions>
+</smile>

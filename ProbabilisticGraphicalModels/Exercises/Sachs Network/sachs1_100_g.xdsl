@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<smile version="1.0" id="sachs1_100" numsamples="10000" discsamples="10000">
+	<nodes>
+		<cpt id="PKC">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<probabilities>0.5 0.36 0.14</probabilities>
+		</cpt>
+		<cpt id="P38">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<probabilities>0.72 0.15 0.13</probabilities>
+		</cpt>
+		<cpt id="PIP2">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<probabilities>0.93 0.05 0.02</probabilities>
+		</cpt>
+		<cpt id="PKA">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<parents>P38 PIP2</parents>
+			<probabilities>0.04615384615384616 0.8615384615384616 0.09230769230769231 0.2222222222222222 0.7222222222222222 0.05555555555555556 0.1111111111111111 0.4444444444444444 0.4444444444444444 0.08333333333333333 0.8958333333333334 0.02083333333333333 0.3333333333333333 0.3333333333333333 0.3333333333333333 0.3333333333333333 0.3333333333333333 0.3333333333333333 0.8809523809523809 0.02380952380952381 0.09523809523809523 0.3333333333333333 0.3333333333333333 0.3333333333333333 0.3333333333333333 0.3333333333333333 0.3333333333333333</probabilities>
+		</cpt>
+		<cpt id="Raf">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<parents>PKA</parents>
+			<probabilities>0.05882352941176471 0.1176470588235294 0.8235294117647058 0.6933333333333334 0.2266666666666667 0.08 0.8148148148148148 0.1481481481481481 0.03703703703703703</probabilities>
+		</cpt>
+		<cpt id="Mek">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<parents>PKA Raf</parents>
+			<probabilities>0.6666666666666667 0.1666666666666667 0.1666666666666667 0.4444444444444444 0.1111111111111111 0.4444444444444444 0.2888888888888889 0.02222222222222222 0.6888888888888889 0.7987421383647797 0.1949685534591195 0.006289308176100628 0.2962962962962963 0.6851851851851852 0.01851851851851852 0.761904761904762 0.1904761904761905 0.04761904761904762 0.9166666666666669 0.04166666666666667 0.04166666666666667 0.6666666666666667 0.1666666666666667 0.1666666666666667 0.3333333333333333 0.3333333333333333 0.3333333333333333</probabilities>
+		</cpt>
+		<cpt id="Akt">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<parents>Mek</parents>
+			<probabilities>0.7064676616915423 0.2885572139303482 0.004975124378109453 0.5138888888888888 0.4722222222222222 0.01388888888888889 0.09090909090909091 0.09090909090909091 0.8181818181818182</probabilities>
+		</cpt>
+		<cpt id="Erk">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<parents>PKA Akt</parents>
+			<probabilities>0.6666666666666667 0.2666666666666667 0.06666666666666667 0.6666666666666667 0.2666666666666667 0.06666666666666667 0.03333333333333333 0.03333333333333333 0.9333333333333335 0.163265306122449 0.7551020408163265 0.08163265306122448 0.03846153846153846 0.3846153846153846 0.576923076923077 0.3333333333333333 0.3333333333333333 0.3333333333333333 0.04166666666666667 0.7916666666666669 0.1666666666666667 0.1666666666666667 0.1666666666666667 0.6666666666666666 0.3333333333333333 0.3333333333333333 0.3333333333333333</probabilities>
+		</cpt>
+		<cpt id="Jnk">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<parents>PKA</parents>
+			<probabilities>0.2352941176470588 0.2941176470588235 0.4705882352941176 0.4385964912280702 0.5570175438596491 0.004385964912280702 0.9259259259259258 0.03703703703703703 0.03703703703703703</probabilities>
+		</cpt>
+		<cpt id="Plcg">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<parents>PIP2</parents>
+			<probabilities>0.89247311827957 0.09677419354838711 0.01075268817204301 0.2 0.6000000000000001 0.2 0.1111111111111111 0.1111111111111111 0.7777777777777778</probabilities>
+		</cpt>
+		<cpt id="PIP3">
+			<state id="x1" />
+			<state id="x2" />
+			<state id="x3" />
+			<probabilities>0.12 0.54 0.34</probabilities>
+		</cpt>
+	</nodes>
+	<extensions>
+		<genie version="1.0" app="GeNIe This network was created in GeNIe Academic, which can be used for academic teaching and research purposes only" name="sachs1_100_g">
+			<node id="PKC">
+				<name>PKC</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>30 10 102 58</position>
+			</node>
+			<node id="PKA">
+				<name>PKA</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>126 10 198 58</position>
+			</node>
+			<node id="Raf">
+				<name>Raf</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>352 64 424 112</position>
+			</node>
+			<node id="Mek">
+				<name>Mek</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>442 7 514 55</position>
+			</node>
+			<node id="Erk">
+				<name>Erk</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>266 204 338 252</position>
+			</node>
+			<node id="Akt">
+				<name>Akt</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>428 106 500 154</position>
+			</node>
+			<node id="Jnk">
+				<name>Jnk</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>262 99 334 147</position>
+			</node>
+			<node id="P38">
+				<name>P38</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>30 74 102 122</position>
+			</node>
+			<node id="Plcg">
+				<name>Plcg</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>157 138 229 186</position>
+			</node>
+			<node id="PIP3">
+				<name>PIP3</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>164 205 236 253</position>
+			</node>
+			<node id="PIP2">
+				<name>PIP2</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>55 170 127 218</position>
+			</node>
+			<textbox>
+				<caption>Input file: sachs1_100.txt\nData rows: 100\nElapsed time: 0.047s\n\nLearning algorithm: Greedy ThickThinning\nAlgorithm parameters:\nMax parent count: 8\nNo background knowledge\n\nScore: -961.699\nEM Log Likelihood: -709.141</caption>
+				<font color="000000" name="Arial" size="8" />
+				<position>30 270 228 424</position>
+			</textbox>
+		</genie>
+	</extensions>
+</smile>
